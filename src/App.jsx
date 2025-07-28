@@ -18,6 +18,7 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
+    localStorage.removeItem('role');
     setIsLoggedIn(false);
     alert("Logout successful!");
     window.location.href = '/introducer/login';
@@ -39,25 +40,44 @@ function App() {
           <Route path='/' element={<HomePage />} />
           <Route path="/login" element={<LoginPage onLogin={() => setIsLoggedIn(true)} />} />
           <Route path="/register" element={<RegisterPage onRegister={() => setIsLoggedIn(true)} />} />
+          
           <Route
             path="/refer"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['user', 'admin']}>
                 <MortgageReferralForm />
               </ProtectedRoute>
             }
           />
+          
           <Route
             path="/my-referrals"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['user', 'admin']}>
                 <MyReferrals />
               </ProtectedRoute>
             }
           />
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/user/:referralId" element={<UserDetails />} />
+
+          <Route
+            path="/admin-dashboard"
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/user/:referralId"
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <UserDetails />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
+
       </Container>
     </Router>
   );

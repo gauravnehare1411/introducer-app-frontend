@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Card, Spinner } from 'react-bootstrap';
+import { Table, Card, Spinner, Button, Col } from 'react-bootstrap';
 import api from '../api';
+import { useNavigate } from 'react-router-dom';
 
 const MyReferrals = () => {
   const [referrals, setReferrals] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const fetchReferrals = async () => {
@@ -57,6 +59,9 @@ const MyReferrals = () => {
           </Table>
         )}
       </Card.Body>
+      <Col xs="auto">
+        <Button variant="success" className='m-2' onClick={() => navigate('/refer')}>Refer Friend or Family</Button>
+      </Col>
     </Card>
   );
 };

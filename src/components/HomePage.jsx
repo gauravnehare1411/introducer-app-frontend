@@ -19,13 +19,12 @@ const HomePage = () => {
 
       <Card className="mb-4 shadow">
         <Card.Body>
-          <Card.Title as="h2" className="text-center mb-3">About Us</Card.Title>
           <Card.Text>
             As independent mortgage advisors, we have a holistic view of the mortgage market, giving us access to a wide range of lenders and products. This allows us to tailor solutions that best fit your unique needs.
             <br /><br />
             Whether you're buying your first home, remortgaging, or exploring investment opportunities, we are here to secure the best deal for you.
             <br /><br />
-            Our commitment is to guide you every step of the way, making the process smooth and stress-free while ensuring you achieve your homeownership goals with confidence. Let's build your future together.
+            Our commitment is to guide you every step of the way, making the process smooth and stress-free while ensuring you achieve your homeownership goals with confidence.
           </Card.Text>
         </Card.Body>
       </Card>
@@ -43,10 +42,7 @@ const HomePage = () => {
         ) : (
           <>
             <Col xs="auto">
-              <Button variant="success" onClick={() => navigate('/refer')}>Refer Friend or Family</Button>
-            </Col>
-            <Col xs="auto">
-              <Button variant="info" onClick={() => navigate('/my-referrals')}>My Referrals</Button>
+              <Button variant="info" className='m-2' onClick={() => navigate('/my-referrals')}>Referrals</Button>
             </Col>
           </>
         )}

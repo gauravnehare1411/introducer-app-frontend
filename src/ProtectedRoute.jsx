@@ -1,13 +1,14 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
-const ProtectedRoute = ({ children }) => {
-  const isLoggedIn = !!localStorage.getItem('access_token');
+const ProtectedRoute = ({ children, allowedRoles }) => {
+  const token = localStorage.getItem('access_token');
+  const userRole = localStorage.getItem('role');
   const location = useLocation();
 
-  return isLoggedIn
-    ? children
-    : <Navigate to="/" state={{ from: location }} replace />;
+  const isAllowed = token && allowedRoles.includes(userRole);
+
+  return isAllowed ? children : <Navigate to="/" state={{ from: location }} replace />;
 };
 
 export default ProtectedRoute;

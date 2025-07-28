@@ -25,10 +25,17 @@ const LoginPage = ({ onLogin }) => {
 
       localStorage.setItem('access_token', res.data.access_token);
       localStorage.setItem('refresh_token', res.data.refresh_token);
+      localStorage.setItem('role', res.data.role);
 
       onLogin();
       alert("Login successful!!");
-      navigate('/');
+      if (res.data.role?.toLowerCase() === 'admin') {
+        console.log(res.data.role);
+        navigate('/admin-dashboard');
+      } else {
+        console.log("else part")
+        navigate('/');
+      }
     } catch (err) {
       setError('Login failed: ' + (err.response?.data?.detail || 'Wrong email or password'));
     }

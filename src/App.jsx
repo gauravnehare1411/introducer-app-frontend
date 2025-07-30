@@ -10,19 +10,14 @@ import AdminDashboard from './components/AdminApp/AdminDashboard';
 import UserDetails from './components/AdminApp/UserDetails';
 import AppNavbar from './components/Navbar/Navbar';
 import HomePage from './components/HomePage';
+import ResetPasswordPage from './components/UserApp/ResetPasswordPage/ResetPasswordPage';
+import EditProfile from './components/UserApp/EditProfile/EditProfile';
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('access_token'));
-
-  const handleLogout = () => {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('role');
-    setIsLoggedIn(false);
-    alert("Logout successful!");
-    window.location.href = '/introducer/login';
-  };
 
   useEffect(() => {
     const checkLogin = () => {
@@ -34,13 +29,13 @@ function App() {
 
   return (
     <Router basename="/introducer">
-      <AppNavbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+      <AppNavbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
       <Container>
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path="/login" element={<LoginPage onLogin={() => setIsLoggedIn(true)} />} />
           <Route path="/register" element={<RegisterPage onRegister={() => setIsLoggedIn(true)} />} />
-          
+          <Route path='/reset-password' element={<ResetPasswordPage />} />
           <Route
             path="/refer"
             element={
@@ -76,9 +71,18 @@ function App() {
               </ProtectedRoute>
             }
           />
-        </Routes>
 
+          <Route
+            path="/edit-profile"
+            element={
+              <ProtectedRoute allowedRoles={['user', 'admin']}>
+                <EditProfile />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
       </Container>
+      <ToastContainer position='top-center' autoClose={3000} hideProgressBar />
     </Router>
   );
 }

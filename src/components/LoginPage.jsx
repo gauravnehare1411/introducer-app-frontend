@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { Form, Button, Card, Container } from 'react-bootstrap';
+import { Form, Button, Card, Container, Modal } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../api';
+import { toast } from 'react-toastify';
+import PasswordResetModal from './UserApp/PasswordResetModal/PasswordResetModal';
 
 const LoginPage = ({ onLogin }) => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [showResetModal, setShowResetModal] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,7 +31,7 @@ const LoginPage = ({ onLogin }) => {
       localStorage.setItem('role', res.data.role);
 
       onLogin();
-      alert("Login successful!!");
+      toast.success("Logged in successful.");
       if (res.data.role?.toLowerCase() === 'admin') {
         console.log(res.data.role);
         navigate('/admin-dashboard');
@@ -73,6 +76,16 @@ const LoginPage = ({ onLogin }) => {
                 required
               />
             </Form.Group>
+            <div className="text-end mb-3">
+              <Button
+                variant="link"
+                className="p-0 text-decoration-none"
+                style={{ color: '#0d6efd' }}
+                onClick={() => setShowResetModal(true)}
+              >
+                Forgot Password?
+              </Button>
+            </div>
             {error && <div className="text-danger mb-3 text-center">{error}</div>}
             <Button type="submit" className="w-100" variant="primary">
               Login
@@ -86,6 +99,7 @@ const LoginPage = ({ onLogin }) => {
           </div>
         </Card.Body>
       </Card>
+      <PasswordResetModal show={showResetModal} onHide={() => setShowResetModal(false)} />
     </div>
   );
 };

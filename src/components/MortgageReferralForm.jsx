@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
 import api from '../api';
+import { toast } from 'react-toastify';
 
 const MortgageReferralForm = () => {
   const [formData, setFormData] = useState({
@@ -17,11 +18,11 @@ const MortgageReferralForm = () => {
     try {
       await api.post('/submit-referral', formData);
       
-      alert('Referral submitted successfully!');
+      toast.success('Referral submitted successfully!');
       setFormData({firstName: '', lastName: '', referralPhone: '', referralEmail: '', purpose: '', comment: ''});
     } catch (error) {
       if (error.response) {
-          alert('Something went wrong. Please try again later.');
+          toast.error('Something went wrong. Please try again later.');
         }
     }
   };
@@ -68,7 +69,14 @@ const MortgageReferralForm = () => {
             <Form.Label>Comments</Form.Label>
             <Form.Control as="textarea" name="comment" value={formData.comment} onChange={handleChange} rows={3} />
           </Form.Group>
-          <Button variant="primary" type="submit" className="w-100">Submit</Button>
+          <Row className="mt-4">
+            <Col className="d-flex justify-content-start">
+              <Button variant="secondary" onClick={() => window.history.back()}>Back</Button>
+            </Col>
+            <Col className="d-flex justify-content-end">
+              <Button variant="primary" type="submit">Submit</Button>
+            </Col>
+          </Row>
         </Form>
       </Card.Body>
     </Card>

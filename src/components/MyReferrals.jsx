@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Card, Spinner, Button, Col } from 'react-bootstrap';
+import { Table, Card, Spinner, Button, Col, Row } from 'react-bootstrap';
 import api from '../api';
 import { useNavigate } from 'react-router-dom';
 
@@ -59,9 +59,16 @@ const MyReferrals = () => {
           </Table>
         )}
       </Card.Body>
-      <Col xs="auto">
-        <Button variant="success" className='m-2' onClick={() => navigate('/refer')}>Refer Friend or Family</Button>
-      </Col>
+      <Row className="px-3 pb-3">
+        <Col xs="6" className="text-start">
+          <Button variant="secondary" onClick={() => navigate(-1)}>Back</Button>
+        </Col>
+        <Col xs="6" className="text-end">
+          <Button variant="success" onClick={() => navigate('/refer')}>
+            Refer Friend or Family
+          </Button>
+        </Col>
+      </Row>
     </Card>
   );
 };

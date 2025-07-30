@@ -1,14 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Navbar, Container, Nav, Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import aai_logo from '../../assets/aai_logo.png';
+import { toast } from 'react-toastify';
+import FloatingProfile from '../UserApp/Profile';
+import PasswordResetModal from '../UserApp/PasswordResetModal/PasswordResetModal';
 
-const AppNavbar = ({ isLoggedIn, handleLogout }) => {
+const AppNavbar = ({ isLoggedIn, setIsLoggedIn }) => {
   const [expanded, setExpanded] = React.useState(false);
   const closeNavbar = () => setExpanded(false);
   const navigate = useNavigate();
+  const [showProfileCard, setShowProfileCard] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
+  
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('role');
+    setIsLoggedIn(false);
+    toast.success("Logout successful!");
+    navigate('/');
+  };
 
   return (
+    <>
     <Navbar expanded={expanded} onToggle={setExpanded} variant="dark" expand="lg" className="mb-4" style={{backgroundColor: '#2a3d94ff'}}>
       <Container>
         <Navbar.Brand as={Link} to="/" onClick={closeNavbar}>
@@ -24,9 +39,12 @@ const AppNavbar = ({ isLoggedIn, handleLogout }) => {
           <Nav>
             {isLoggedIn ? (
               <>
-                <Nav.Link as={Link} to="#" disabled style={{ color: '#fff' }}>
+                <Nav.Link onClick={() => {
+                    setShowProfileCard(!showProfileCard);
+                  }} style={{ color: '#fff' }}>
                   <i className="bi bi-person-circle"></i> Profile
                 </Nav.Link>
+                
                 <Button variant="outline-light" onClick={() => { closeNavbar(); handleLogout(); }} className="ms-2">
                   Logout
                 </Button>
@@ -41,6 +59,13 @@ const AppNavbar = ({ isLoggedIn, handleLogout }) => {
         </Navbar.Collapse>
       </Container>
     </Navbar>
+    {showProfileCard && 
+    <FloatingProfile 
+      onClose={() => setShowProfileCard(false)} 
+      onChangePassword={() => setShowResetModal(true)}
+      />}
+    <PasswordResetModal show={showResetModal} onHide={() => setShowResetModal(false)} />
+    </>
   );
 };
 

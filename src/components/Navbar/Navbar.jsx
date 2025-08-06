@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import FloatingProfile from '../UserApp/Profile';
 import PasswordResetModal from '../UserApp/PasswordResetModal/PasswordResetModal';
 
-const AppNavbar = ({ isLoggedIn, setIsLoggedIn }) => {
+const AppNavbar = ({ isLoggedIn, setIsLoggedIn, userRole, setUserRole }) => {
   const [expanded, setExpanded] = React.useState(false);
   const closeNavbar = () => setExpanded(false);
   const navigate = useNavigate();
@@ -18,6 +18,7 @@ const AppNavbar = ({ isLoggedIn, setIsLoggedIn }) => {
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('role');
     setIsLoggedIn(false);
+    setUserRole(null);
     toast.success("Logout successful!");
     navigate('/');
   };
@@ -36,9 +37,21 @@ const AppNavbar = ({ isLoggedIn, setIsLoggedIn }) => {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbar" />
         <Navbar.Collapse id="navbar" className="justify-content-end">
-          <Nav>
+          <Nav 
+            className="
+              d-flex
+              flex-column flex-lg-row
+              align-items-center
+              text-center
+              gap-2 gap-lg-0
+            "
+          >
             {isLoggedIn ? (
               <>
+                { userRole?.toLowerCase() === 'admin' &&
+                  <Nav.Link as={Link} to="/admin-dashboard" onClick={closeNavbar}>Dashboard</Nav.Link>
+                }
+
                 <Nav.Link onClick={() => {
                     setShowProfileCard(!showProfileCard);
                   }} style={{ color: '#fff' }}>

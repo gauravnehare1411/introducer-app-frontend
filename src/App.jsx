@@ -14,14 +14,17 @@ import ResetPasswordPage from './components/UserApp/ResetPasswordPage/ResetPassw
 import EditProfile from './components/UserApp/EditProfile/EditProfile';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Applications from './components/AdminApp/Applications';
 
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('access_token'));
+  const [userRole, setUserRole] = useState(localStorage.getItem('role'));
 
   useEffect(() => {
     const checkLogin = () => {
       setIsLoggedIn(!!localStorage.getItem('access_token'));
+      setUserRole(localStorage.getItem('role'));
     };
     window.addEventListener('storage', checkLogin);
     return () => window.removeEventListener('storage', checkLogin);
@@ -29,12 +32,28 @@ function App() {
 
   return (
     <Router basename="/introducer">
-      <AppNavbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
+      <AppNavbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} userRole={userRole} setUserRole={setUserRole}/>
       <Container>
         <Routes>
           <Route path='/' element={<HomePage />} />
-          <Route path="/login" element={<LoginPage onLogin={() => setIsLoggedIn(true)} />} />
-          <Route path="/register" element={<RegisterPage onRegister={() => setIsLoggedIn(true)} />} />
+          <Route path="/login" element={
+            <LoginPage 
+              onLogin={
+                () => {
+                  setIsLoggedIn(true);
+                  setUserRole(localStorage.getItem('role'));
+                }}
+            />} 
+          />
+          <Route path="/register" element={
+            <RegisterPage 
+              onRegister={
+                () => {
+                  setIsLoggedIn(true);
+                  setUserRole(localStorage.getItem('role'));
+                }}
+            />}  
+          />
           <Route path='/reset-password' element={<ResetPasswordPage />} />
           <Route
             path="/refer"
@@ -77,6 +96,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={['user', 'admin']}>
                 <EditProfile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/applications"
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <Applications />
               </ProtectedRoute>
             }
           />

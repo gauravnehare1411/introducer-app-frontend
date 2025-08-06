@@ -4,12 +4,12 @@ import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const isLoggedIn = !!localStorage.getItem('access_token'); // Adjust key as needed
+  const isLoggedIn = !!localStorage.getItem('access_token');
 
   return (
     <Container className="py-5">
       <Card className="text-center shadow-lg mb-4">
-        <Card.Header as="h1" className="text-white" style={{backgroundColor: '#2a3d94ff'}}>Welcome to AAI Financials!</Card.Header>
+        <Card.Header as="h1" style={{backgroundColor: '#f3f3f5ff', color: 'blue'}}>Welcome to AAI Financials!</Card.Header>
         <Card.Body>
           <Card.Text className="fs-5">
             Where we prioritize your financial journey with trust, transparency, and expertise.

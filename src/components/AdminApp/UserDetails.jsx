@@ -1,62 +1,133 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Form } from 'react-bootstrap';
+import { Table, Badge, Spinner } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import api from '../../api';
+import ReferralDetailsModal from './ReferralDetailsModal';
 
 const UserDetails = () => {
   const { referralId } = useParams();
   const [referrals, setReferrals] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const [show, setShow] = useState(false);
+  const [selected, setSelected] = useState(null);
 
   useEffect(() => {
-    api.get(`/admin/referrals/${referralId}`)
-      .then(res => setReferrals(res.data))
-      .catch(err => console.error(err));
+    const load = async () => {
+      try {
+        const res = await api.get(`/admin/referrals/${referralId}`);
+        setReferrals(res.data || []);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
   }, [referralId]);
 
-  const handleStatusChange = async (referralId, newStatus) => {
+  const totalReferrals = referrals.length;
+
+  const parseCreatedAt = (v) => {
+    if (!v) return null;
+    if (typeof v === 'string') {
+      const d = new Date(v);
+      return isNaN(d.getTime()) ? null : d;
+    }
+    if (typeof v === 'object' && v.$date) {
+      const d = new Date(v.$date);
+      return isNaN(d.getTime()) ? null : d;
+    }
     try {
-      await api.patch(`admin/referrals/${referralId}/status`, { status: newStatus });
-      setReferrals(prev =>
-        prev.map(ref => ref._id === referralId ? { ...ref, status: newStatus } : ref)
+      const d = new Date(v);
+      return isNaN(d.getTime()) ? null : d;
+    } catch {
+      return null;
+    }
+  };
+
+  const formatCreatedAtUK = (v) => {
+    const d = parseCreatedAt(v);
+    if (!d) return '—';
+    return new Intl.DateTimeFormat('en-GB', {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+      timeZone: 'Europe/London',
+    }).format(d);
+  };
+
+  const openDetails = (ref) => {
+    setSelected(ref);
+    setShow(true);
+  };
+
+  const closeDetails = () => {
+    setShow(false);
+    setSelected(null);
+  };
+
+  const handleSaveStatus = async (newStatus) => {
+    if (!selected?._id) return;
+    try {
+      await api.patch(`/admin/referrals/${selected._id}/status`, { status: newStatus });
+
+      setReferrals((prev) =>
+        prev.map((r) => (r._id === selected._id ? { ...r, status: newStatus } : r))
       );
+
+      setSelected((prev) => (prev ? { ...prev, status: newStatus } : prev));
     } catch (error) {
-      console.error("Failed to update status:", error);
+      console.error('Failed to update status:', error);
+      throw error; 
     }
   };
 
   return (
     <div className="container mt-4">
-      <h4 className="mb-4">Referrals for ID: {referralId}</h4>
-      {referrals.length > 0 ? (
-        <Table striped bordered responsive>
+      <h4 className="mb-3">Referrals for ID: {referralId}</h4>
+      <Badge className="m-2 p-2" bg="primary" pill title="Total referrals">
+        Total Referrals - {totalReferrals}
+      </Badge>
+
+      {loading ? (
+        <div className="py-4 d-flex justify-content-center">
+          <Spinner animation="border" />
+        </div>
+      ) : referrals.length > 0 ? (
+        <Table striped bordered responsive hover>
           <thead>
             <tr>
+              <th style={{ width: 60 }}>#</th>
               <th>Name</th>
               <th>Email</th>
-              <th>Phone</th>
               <th>Purpose</th>
-              <th>Comment</th>
               <th>Status</th>
+              <th>Created At</th>
             </tr>
           </thead>
           <tbody>
-            {referrals.map(ref => (
-              <tr key={ref._id}>
+            {referrals.map((ref, idx) => (
+              <tr
+                key={ref._id}
+                onClick={() => openDetails(ref)}
+                style={{ cursor: 'pointer' }}
+                title="Click to view & change status"
+              >
+                <td>{idx + 1}</td>
                 <td>{ref.firstName} {ref.lastName}</td>
                 <td>{ref.referralEmail}</td>
-                <td>{ref.referralPhone}</td>
                 <td>{ref.purpose}</td>
-                <td>{ref.comment}</td>
                 <td>
-                  <Form.Select
-                    value={ref.status}
-                    onChange={(e) => handleStatusChange(ref._id, e.target.value)}
+                  <Badge
+                    bg={
+                      ref.status === 'Approved' ? 'success' :
+                      ref.status === 'Rejected' ? 'danger' : 'secondary'
+                    }
                   >
-                    <option value="Pending">Pending</option>
-                    <option value="Approved">Approved</option>
-                    <option value="Rejected">Rejected</option>
-                  </Form.Select>
+                    {ref.status}
+                  </Badge>
                 </td>
+                <td>{formatCreatedAtUK(ref.created_at)}</td>
               </tr>
             ))}
           </tbody>
@@ -64,6 +135,14 @@ const UserDetails = () => {
       ) : (
         <p>No referrals found.</p>
       )}
+
+      <ReferralDetailsModal
+        show={show}
+        onHide={closeDetails}
+        referral={selected}
+        onSaveStatus={handleSaveStatus}
+        formatCreatedAt={formatCreatedAtUK}
+      />
     </div>
   );
 };

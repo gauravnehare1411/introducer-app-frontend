@@ -33,10 +33,8 @@ const LoginPage = ({ onLogin }) => {
       onLogin();
       toast.success("Logged in successful.");
       if (res.data.role?.toLowerCase() === 'admin') {
-        console.log(res.data.role);
         navigate('/admin-dashboard');
       } else {
-        console.log("else part")
         navigate('/');
       }
     } catch (err) {

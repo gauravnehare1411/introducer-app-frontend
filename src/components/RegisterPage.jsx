@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Button, Card, Container, Modal } from 'react-bootstrap';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../api';
+import { toast } from 'react-toastify';
 
 const RegisterPage = ({ onRegister }) => {
   const [formData, setFormData] = useState({
@@ -44,10 +45,10 @@ const RegisterPage = ({ onRegister }) => {
       localStorage.setItem('refresh_token', res.data.refresh_token);
       localStorage.setItem('role', res.data.role);
       onRegister();
-      alert('Registration successful!');
+      toast.success('Registration successful!');
       navigate('/');
     } catch (err) {
-      alert('Verification failed: ' + (err.response?.data?.detail || 'Unknown error'));
+      toast.error('Verification failed: ' + (err.response?.data?.detail || 'Unknown error'));
     }
   };
 

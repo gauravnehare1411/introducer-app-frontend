@@ -15,6 +15,7 @@ import EditProfile from './components/UserApp/EditProfile/EditProfile';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Applications from './components/AdminApp/Applications';
+import Registrations from './components/AdminApp/Registrations';
 
 
 function App() {
@@ -107,6 +108,15 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path='/admin/registrations'
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <Registrations />
+              </ProtectedRoute>
+            }
+            >
+          </Route>
         </Routes>
       </Container>
       <ToastContainer position='top-center' autoClose={3000} hideProgressBar />

@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
-import { Form, Button, Card, Container, Modal } from 'react-bootstrap';
-import { useNavigate, Link } from 'react-router-dom';
-import api from '../api';
+import React, { useState } from "react";
+import { Container, Button, Form, Card, Modal } from "react-bootstrap";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from 'react-toastify';
+import api from "../../api";
 
-const RegisterPage = ({ onRegister }) => {
+export default function Registration({ onRegister }) {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    contactnumber: '',
-    password: '',
+    name: "",
+    email: "",
+    contactnumber: "",
+    password: "",
+    role: "customer",
   });
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -21,7 +22,7 @@ const RegisterPage = ({ onRegister }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleRegister = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await api.post('/register', formData);
@@ -30,6 +31,7 @@ const RegisterPage = ({ onRegister }) => {
     } catch (err) {
       const detail = err.response?.data?.detail || 'Unknown error';
       setError('Registration failed: ' + detail);
+      toast.error('Registration failed: ' + detail);
     }
   };
 
@@ -48,6 +50,7 @@ const RegisterPage = ({ onRegister }) => {
       toast.success('Registration successful!');
       navigate('/');
     } catch (err) {
+        console.log(err);
       toast.error('Verification failed: ' + (err.response?.data?.detail || 'Unknown error'));
     }
   };
@@ -56,70 +59,70 @@ const RegisterPage = ({ onRegister }) => {
     try {
       await api.post('/resend-code', { email: formData.email });
       setResendStatus('Verification code resent successfully.');
+      toast.info('Verification code resent successfully.');
     } catch (err) {
       setResendStatus('Failed to resend code: ' + (err.response?.data?.detail || 'Unknown error'));
+      toast.error('Failed to resend code');
     }
   };
 
   return (
     <Container fluid className="bg-light py-5 px-2">
       <div className="d-flex justify-content-center">
-        <Card className="shadow-lg p-4 w-100" style={{ maxWidth: '700px', borderRadius: '20px' }}>
+        <Card className="shadow-lg p-4 w-100" style={{ maxWidth: "500px", borderRadius: "20px" }}>
           <Card.Body>
-            <h3 className="text-center mb-3" style={{ color: '#391856' }}>
-              Register as an Introducer
-            </h3>
-            <p className="text-muted text-center mb-4">
-              Join us as an introducer to refer mortgage clients, track referrals, and earn rewards.
-              Get started by filling out the form below.
-            </p>
-            <Form onSubmit={handleRegister}>
+            <h2 className="text-center mb-3" style={{ color: '#391856' }}>Start Your Journey</h2>
+            <p className="text-center mb-4">Please provide your details to create your account</p>
+            <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3">
-                <Form.Label>Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="name"
+                <Form.Label>Full Name</Form.Label>
+                <Form.Control 
+                  type="text" 
+                  name="name" 
+                  placeholder="Enter your full name" 
                   value={formData.name}
-                  onChange={handleChange}
-                  placeholder="Your full name"
+                  onChange={handleChange} 
                   required
                 />
               </Form.Group>
               <Form.Group className="mb-3">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  name="email"
+                <Form.Label>Email Address</Form.Label>
+                <Form.Control 
+                  type="email" 
+                  name="email" 
+                  placeholder="Enter your email" 
                   value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Your email address"
+                  onChange={handleChange} 
                   required
                 />
               </Form.Group>
               <Form.Group className="mb-3">
                 <Form.Label>Contact Number</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="contactnumber"
+                <Form.Control 
+                  type="text" 
+                  name="contactnumber" 
+                  placeholder="Enter your contact number" 
                   value={formData.contactnumber}
-                  onChange={handleChange}
-                  placeholder="Your contact number"
+                  onChange={handleChange} 
                   required
                 />
               </Form.Group>
-              <Form.Group className="mb-3">
+              <Form.Group className="mb-4">
                 <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  name="password"
+                <Form.Control 
+                  type="password" 
+                  name="password" 
+                  placeholder="Enter a password" 
                   value={formData.password}
-                  onChange={handleChange}
-                  placeholder="Create a password"
+                  onChange={handleChange} 
                   required
                 />
               </Form.Group>
               {error && <div className="text-danger mb-3 text-center">{error}</div>}
-              <Button type="submit" className="w-100" variant="primary">
+              <Button 
+                type="submit" 
+                style={{ width: "100%", backgroundColor: "#F15808", border: "none" }}
+              >
                 Register
               </Button>
             </Form>
@@ -148,22 +151,26 @@ const RegisterPage = ({ onRegister }) => {
               onChange={(e) => setVerificationCode(e.target.value)}
             />
           </Form.Group>
+          <Form.Group className="mt-3">
+            <Button variant="link" onClick={handleResendCode} className="p-0">
+              Resend Code
+            </Button>
+            {resendStatus && (
+              <div className="mt-2 p-2 text-muted small">{resendStatus}</div>
+            )}
+          </Form.Group>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowModal(false)}>Cancel</Button>
-          <Button variant="primary" onClick={handleVerifyCode}>Verify & Complete Registration</Button>
-        </Modal.Footer>
-        <Form.Group className="mt-3">
-          <Button variant="link" onClick={handleResendCode} className="p-2">
-            Resend Code
+          <Button 
+            variant="primary" 
+            onClick={handleVerifyCode}
+            style={{ backgroundColor: "#F15808", border: "none" }}
+          >
+            Verify & Complete Registration
           </Button>
-          {resendStatus && (
-            <div className="mt-2 p-2 text-muted small">{resendStatus}</div>
-          )}
-        </Form.Group>
+        </Modal.Footer>
       </Modal>
     </Container>
   );
-};
-
-export default RegisterPage;
+}

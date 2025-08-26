@@ -25,13 +25,13 @@ const AppNavbar = ({ isLoggedIn, setIsLoggedIn, userRole, setUserRole }) => {
 
   return (
     <>
-    <Navbar expanded={expanded} onToggle={setExpanded} variant="dark" expand="lg" className="mb-4" style={{backgroundColor: '#2a3d94ff'}}>
+    <Navbar expanded={expanded} onToggle={setExpanded} expand="lg" className="mb-4" style={{borderBottom: "1px solid #FF6210"}}>
       <Container>
         <Navbar.Brand as={Link} to="/" onClick={closeNavbar}>
           <img
             src={aai_logo}
             alt="Logo"
-            height="40"
+            height="50"
             style={{ objectFit: "contain" }}
           />
         </Navbar.Brand>
@@ -54,11 +54,11 @@ const AppNavbar = ({ isLoggedIn, setIsLoggedIn, userRole, setUserRole }) => {
 
                 <Nav.Link onClick={() => {
                     setShowProfileCard(!showProfileCard);
-                  }} style={{ color: '#fff' }}>
+                  }} style={{ color: '#000000ff' }}>
                   <i className="bi bi-person-circle"></i> Profile
                 </Nav.Link>
                 
-                <Button variant="outline-light" onClick={() => { closeNavbar(); handleLogout(); }} className="ms-2">
+                <Button style={{color: 'red', backgroundColor: 'white', border:'1px solid #FF6210'}} onClick={() => { closeNavbar(); handleLogout(); }} className="ms-2">
                   Logout
                 </Button>
               </>

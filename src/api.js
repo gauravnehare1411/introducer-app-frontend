@@ -6,15 +6,17 @@ const api = axios.create({
 
 // Interceptor to attach token
 
-
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('access_token');
-    const skipAuth = ['/token', '/register']; // exclude login & register
+    const skipAuth = ['/token', '/register'];
     const isAuthEndpoint = skipAuth.some((url) => config.url.includes(url));
 
     if (token && !isAuthEndpoint) {
       config.headers.Authorization = `Bearer ${token}`;
+      console.log('✅ Token attached');
+      } else {
+        console.log('🚫 Token not attached');
     }
 
     return config;

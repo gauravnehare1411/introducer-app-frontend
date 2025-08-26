@@ -9,7 +9,7 @@ const HomePage = () => {
   return (
     <Container className="py-5">
       <Card className="text-center shadow-lg mb-4">
-        <Card.Header as="h1" style={{backgroundColor: '#f3f3f5ff', color: 'blue'}}>Welcome to AAI Financials!</Card.Header>
+        <Card.Header as="h1" style={{backgroundColor: '#f3f3f5ff', color: '#391856'}}>Welcome to AAI Financials!</Card.Header>
         <Card.Body>
           <Card.Text className="fs-5">
             Where we prioritize your financial journey with trust, transparency, and expertise.
@@ -42,7 +42,15 @@ const HomePage = () => {
         ) : (
           <>
             <Col xs="auto">
-              <Button variant="info" className='m-2' onClick={() => navigate('/my-referrals')}>Referrals</Button>
+              <Button 
+                className="m-2 text-white" 
+                style={{ backgroundColor: '#FF6210', border: 'none' }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e0550f'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FF6210'}
+                onClick={() => navigate('/my-referrals')}
+              >
+                Referrals
+              </Button>
             </Col>
           </>
         )}

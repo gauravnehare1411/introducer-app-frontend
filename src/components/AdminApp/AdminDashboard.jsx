@@ -128,9 +128,16 @@ const AdminDashboard = () => {
       <Badge className="m-2 p-2" bg="primary" pill title="Total users">Total User - {totalUsers}</Badge>
       <Button
         variant="outline-secondary"
+        className='m-2'
         onClick={() => navigate('/admin/applications')}
       >
         Applications
+      </Button>
+      <Button
+        variant="outline-secondary"
+        onClick={() => navigate('/admin/registrations')}
+      >
+        Registrations
       </Button>
       {loadingList ? (
         <div className="d-flex justify-content-center py-5">

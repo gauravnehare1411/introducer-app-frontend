@@ -44,9 +44,9 @@ const LoginPage = ({ onLogin }) => {
 
   return (
     <div className="d-flex justify-content-center bg-light py-5 px-2 min-vh-100">
-      <Card className="shadow-lg w-100 mx-2 px-3 py-4" style={{ maxWidth: '700px', backgroundColor: '#f0f8ff', borderRadius: '20px' }}>
+      <Card className="shadow-lg w-100 mx-2 px-3 py-4" style={{ maxWidth: '700px', borderRadius: '20px' }}>
         <Card.Body>
-          <h3 className="text-center mb-3" style={{ color: '#0d6efd' }}>Login as an Introducer</h3>
+          <h3 className="text-center mb-3" style={{ color: '#391856' }}>Login as an Introducer</h3>
           <p className="text-muted text-center mb-4">
             Introducers are professionals or partners who refer potential mortgage clients to us.
             By logging in, you can submit referrals, track their progress, and earn rewards for each successful referral.
@@ -91,7 +91,7 @@ const LoginPage = ({ onLogin }) => {
           </Form>
           <div className="text-center mt-4">
             <span className="text-secondary">Not registered as an introducer?</span>{' '}
-            <Link to="/register" className="text-decoration-none" style={{ color: '#0d6efd', fontWeight: 'bold' }}>
+            <Link to="/register" className="text-decoration-none" style={{ color: '#FF6210', fontWeight: 'bold' }}>
               Click here to register
             </Link>
           </div>

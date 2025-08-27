@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import api from "../../api";
-import { Container, Table, Spinner, Alert } from "react-bootstrap";
+import api from "../../../api";
+import { Container, Table, Spinner, Alert, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 export default function Registrations() {
   const [registrations, setRegistrations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate()
 
   useEffect(() => {
     const load = async () => {
@@ -41,6 +43,7 @@ export default function Registrations() {
   }
 
   return (
+    <>
     <Container className="py-5">
       <h2 className="mb-4">Registrations</h2>
 
@@ -69,5 +72,7 @@ export default function Registrations() {
         </Table>
       )}
     </Container>
+    <Button variant="secondary" style={{float:'right'}} onClick={() => navigate(-1)}>Back</Button>
+    </>
   );
 }

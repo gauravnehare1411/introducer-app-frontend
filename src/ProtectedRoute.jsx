@@ -1,14 +1,13 @@
-import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const token = localStorage.getItem('access_token');
-  const userRole = localStorage.getItem('role');
+  const userRoles = JSON.parse(localStorage.getItem('roles') || '[]');
   const location = useLocation();
 
-  const isAllowed = token && allowedRoles.includes(userRole);
+  const isAllowed = token && userRoles.some(role => allowedRoles.includes(role));
 
-  return isAllowed ? children : <Navigate to="/" state={{ from: location }} replace />;
+  return isAllowed ? children : <Navigate to="/register" state={{ from: location }} replace />;
 };
 
 export default ProtectedRoute;

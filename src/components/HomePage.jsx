@@ -41,17 +41,6 @@ const HomePage = () => {
           </>
         ) : (
           <>
-            <Col xs="auto">
-              <Button 
-                className="m-2 text-white" 
-                style={{ backgroundColor: '#FF6210', border: 'none' }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e0550f'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FF6210'}
-                onClick={() => navigate('/my-referrals')}
-              >
-                Referrals
-              </Button>
-            </Col>
           </>
         )}
       </Row>

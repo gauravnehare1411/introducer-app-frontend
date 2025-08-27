@@ -1,93 +1,71 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
-import MortgageReferralForm from './components/MortgageReferralForm';
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
-import MyReferrals from './components/MyReferrals';
 import ProtectedRoute from './ProtectedRoute';
 import { Container, Nav, Navbar, Button } from 'react-bootstrap';
-import AdminDashboard from './components/AdminApp/AdminDashboard';
-import UserDetails from './components/AdminApp/UserDetails';
 import AppNavbar from './components/Navbar/Navbar';
-import HomePage from './components/HomePage';
 import ResetPasswordPage from './components/UserApp/ResetPasswordPage/ResetPasswordPage';
 import EditProfile from './components/UserApp/EditProfile/EditProfile';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Applications from './components/AdminApp/Applications';
-import Registrations from './components/AdminApp/Registrations';
+import FactFindApp from './components/FactFindApp/FactFindApp';
+import AdminApp from './components/AdminApp/AdminApp';
+import IntroducerApp from './components/IntroducerApp/IntroducerApp';
 
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('access_token'));
-  const [userRole, setUserRole] = useState(localStorage.getItem('role'));
+  const [userRoles, setUserRoles] = useState(JSON.parse(localStorage.getItem('roles') || '[]'));
 
   useEffect(() => {
     const checkLogin = () => {
       setIsLoggedIn(!!localStorage.getItem('access_token'));
-      setUserRole(localStorage.getItem('role'));
-    };
+      setUserRoles(JSON.parse(localStorage.getItem('roles') || '[]'));
+    }; 
     window.addEventListener('storage', checkLogin);
     return () => window.removeEventListener('storage', checkLogin);
   }, []);
 
   return (
-    <Router basename="/introducer">
-      <AppNavbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} userRole={userRole} setUserRole={setUserRole}/>
+    <Router basename='app'>
+      <AppNavbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} userRoles={userRoles} setUserRoles={setUserRoles}/>
       <Container>
         <Routes>
-          <Route path='/' element={<HomePage />} />
-          <Route path="/login" element={
-            <LoginPage 
+          <Route path="/sign-in" element={
+            <LoginPage
               onLogin={
                 () => {
                   setIsLoggedIn(true);
-                  setUserRole(localStorage.getItem('role'));
+                  setUserRoles(JSON.parse(localStorage.getItem('roles') || '[]'));
                 }}
-            />} 
+            />}
           />
-          <Route path="/register" element={
+          <Route path="/sign-up" element={
             <RegisterPage 
               onRegister={
                 () => {
                   setIsLoggedIn(true);
-                  setUserRole(localStorage.getItem('role'));
+                  setUserRoles(JSON.parse(localStorage.getItem('roles') || '[]'));
                 }}
-            />}  
+            />}
           />
           <Route path='/reset-password' element={<ResetPasswordPage />} />
+
           <Route
-            path="/refer"
+            path="/introducer/*"
             element={
               <ProtectedRoute allowedRoles={['user', 'admin']}>
-                <MortgageReferralForm />
+                <IntroducerApp />
               </ProtectedRoute>
             }
           />
           
           <Route
-            path="/my-referrals"
-            element={
-              <ProtectedRoute allowedRoles={['user', 'admin']}>
-                <MyReferrals />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/admin-dashboard"
+            path="/admin/*"
             element={
               <ProtectedRoute allowedRoles={['admin']}>
-                <AdminDashboard />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/admin/user/:referralId"
-            element={
-              <ProtectedRoute allowedRoles={['admin']}>
-                <UserDetails />
+                <AdminApp />
               </ProtectedRoute>
             }
           />
@@ -95,24 +73,17 @@ function App() {
           <Route
             path="/edit-profile"
             element={
-              <ProtectedRoute allowedRoles={['user', 'admin']}>
+              <ProtectedRoute allowedRoles={['customer', 'user', 'admin']}>
                 <EditProfile />
               </ProtectedRoute>
             }
           />
+
           <Route
-            path="/admin/applications"
+            path='/mortgage/*'
             element={
-              <ProtectedRoute allowedRoles={['admin']}>
-                <Applications />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path='/admin/registrations'
-            element={
-              <ProtectedRoute allowedRoles={['admin']}>
-                <Registrations />
+              <ProtectedRoute allowedRoles={['customer']}>
+                <FactFindApp />
               </ProtectedRoute>
             }
             >

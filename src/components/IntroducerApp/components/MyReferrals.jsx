@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Card, Spinner, Button, Col, Row, Modal } from 'react-bootstrap';
-import api from '../api';
+import api from '../../../api';
 import { useNavigate } from 'react-router-dom';
 
 const MyReferrals = () => {
@@ -56,20 +56,16 @@ const MyReferrals = () => {
     }).format(d);
   };
 
-  // NEW: open details modal and fetch full record
   const openDetails = async (ref) => {
     setShowDetails(true);
     setDetailsLoading(true);
     setDetails(null);
     try {
-      // Use whatever id field you have: r.id, r._id, r.referralId.
       const id = ref.id || ref._id || ref.referralId;
-      // Adjust the endpoint name if different in your backend
       const { data } = await api.get(`/referrals/${id}`);
       setDetails(data);
     } catch (e) {
       console.error('Failed to fetch referral details:', e);
-      // Fallback: at least show the row data we already have
       setDetails(ref);
     } finally {
       setDetailsLoading(false);
@@ -125,7 +121,7 @@ const MyReferrals = () => {
           <Button variant="secondary" onClick={() => navigate(-1)}>Back</Button>
         </Col>
         <Col xs="6" className="text-end">
-          <Button variant="success" onClick={() => navigate('/refer')}>
+          <Button variant="success" onClick={() => navigate('/introducer/refer')}>
             Refer Friend or Family
           </Button>
         </Col>

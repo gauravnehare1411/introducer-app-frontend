@@ -2,8 +2,9 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Container, Table, Button, Spinner, Badge, ButtonGroup } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import api from '../../api';
+import api from '../../../api';
 import ReferralDetailsModal from './ReferralDetailsModal';
+import { useNavigate } from 'react-router-dom';
 
 const STATUS_TABS = ['Pending', 'Approved', 'Rejected'];
 
@@ -15,6 +16,8 @@ const Applications = () => {
   const [selected, setSelected] = useState(null);
 
   const total = referrals.length;
+
+  const navigate = useNavigate();
 
   const parseCreatedAt = (v) => {
     if (!v) return null;
@@ -179,6 +182,8 @@ const Applications = () => {
         <p className="mt-3">No {activeStatus.toLowerCase()} referrals found.</p>
       )}
 
+      <Button variant="secondary" style={{float:'right'}} onClick={() => navigate(-1)}>Back</Button>
+      
       <ReferralDetailsModal
         show={show}
         onHide={closeDetails}

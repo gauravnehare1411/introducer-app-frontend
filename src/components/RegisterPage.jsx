@@ -10,7 +10,9 @@ const RegisterPage = ({ onRegister }) => {
     email: '',
     contactnumber: '',
     password: '',
+    roles: ['user'],
   });
+
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [verificationCode, setVerificationCode] = useState('');
@@ -19,6 +21,13 @@ const RegisterPage = ({ onRegister }) => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleRoleChange = (selectedRole) => {
+    setFormData((prev) => ({
+      ...prev,
+      roles: [selectedRole],
+    }));
   };
 
   const handleRegister = async (e) => {
@@ -43,10 +52,14 @@ const RegisterPage = ({ onRegister }) => {
 
       localStorage.setItem('access_token', res.data.access_token);
       localStorage.setItem('refresh_token', res.data.refresh_token);
-      localStorage.setItem('role', res.data.role);
+      localStorage.setItem('roles', JSON.stringify(res.data.roles));
       onRegister();
       toast.success('Registration successful!');
-      navigate('/');
+      if (userRoles.includes('customer')) {
+        navigate('/mortgage');
+      } else {
+        navigate('/introducer');
+      }
     } catch (err) {
       toast.error('Verification failed: ' + (err.response?.data?.detail || 'Unknown error'));
     }
@@ -66,14 +79,12 @@ const RegisterPage = ({ onRegister }) => {
       <div className="d-flex justify-content-center">
         <Card className="shadow-lg p-4 w-100" style={{ maxWidth: '700px', borderRadius: '20px' }}>
           <Card.Body>
-            <h3 className="text-center mb-3" style={{ color: '#391856' }}>
-              Register as an Introducer
-            </h3>
+            <h3 className="text-center mb-3" style={{ color: '#391856' }}>Sign Up</h3>
             <p className="text-muted text-center mb-4">
-              Join us as an introducer to refer mortgage clients, track referrals, and earn rewards.
-              Get started by filling out the form below.
+              Sign up as an Introducer or a Customer
             </p>
             <Form onSubmit={handleRegister}>
+              {/* Name */}
               <Form.Group className="mb-3">
                 <Form.Label>Name</Form.Label>
                 <Form.Control
@@ -85,6 +96,8 @@ const RegisterPage = ({ onRegister }) => {
                   required
                 />
               </Form.Group>
+
+              {/* Email */}
               <Form.Group className="mb-3">
                 <Form.Label>Email</Form.Label>
                 <Form.Control
@@ -96,6 +109,8 @@ const RegisterPage = ({ onRegister }) => {
                   required
                 />
               </Form.Group>
+
+              {/* Contact */}
               <Form.Group className="mb-3">
                 <Form.Label>Contact Number</Form.Label>
                 <Form.Control
@@ -107,6 +122,8 @@ const RegisterPage = ({ onRegister }) => {
                   required
                 />
               </Form.Group>
+
+              {/* Password */}
               <Form.Group className="mb-3">
                 <Form.Label>Password</Form.Label>
                 <Form.Control
@@ -118,22 +135,45 @@ const RegisterPage = ({ onRegister }) => {
                   required
                 />
               </Form.Group>
+
+              {/* ✅ Role Selection (Array-based) */}
+              <Form.Group className="mb-3">
+                <Form.Label>Select Role</Form.Label>
+                <div className="d-flex gap-3">
+                  <Form.Check
+                    type="radio"
+                    label="Introducer"
+                    name="roles"
+                    value="user"
+                    checked={formData.roles.includes('user')}
+                    onChange={() => handleRoleChange('user')}
+                  />
+                  <Form.Check
+                    type="radio"
+                    label="Customer"
+                    name="roles"
+                    value="customer"
+                    checked={formData.roles.includes('customer')}
+                    onChange={() => handleRoleChange('customer')}
+                  />
+                </div>
+              </Form.Group>
+
               {error && <div className="text-danger mb-3 text-center">{error}</div>}
-              <Button type="submit" className="w-100" variant="primary">
-                Register
-              </Button>
+              <Button type="submit" className="w-100" variant="primary">Sign up</Button>
             </Form>
+
             <div className="text-center mt-4">
               <span className="text-secondary">Already registered?</span>{' '}
-              <Link to="/login" className="text-decoration-none" style={{ color: '#FF6210', fontWeight: 'bold' }}>
-                Login here
+              <Link to="/sign-in" className="text-decoration-none" style={{ color: '#FF6210', fontWeight: 'bold' }}>
+                Sign in
               </Link>
             </div>
           </Card.Body>
         </Card>
       </div>
 
-      {/* Modal for verification code */}
+      {/* Email Verification Modal */}
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>Email Verification</Modal.Title>
@@ -154,12 +194,8 @@ const RegisterPage = ({ onRegister }) => {
           <Button variant="primary" onClick={handleVerifyCode}>Verify & Complete Registration</Button>
         </Modal.Footer>
         <Form.Group className="mt-3">
-          <Button variant="link" onClick={handleResendCode} className="p-2">
-            Resend Code
-          </Button>
-          {resendStatus && (
-            <div className="mt-2 p-2 text-muted small">{resendStatus}</div>
-          )}
+          <Button variant="link" onClick={handleResendCode} className="p-2">Resend Code</Button>
+          {resendStatus && <div className="mt-2 p-2 text-muted small">{resendStatus}</div>}
         </Form.Group>
       </Modal>
     </Container>

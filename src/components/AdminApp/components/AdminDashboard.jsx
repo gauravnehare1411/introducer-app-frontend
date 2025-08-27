@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Container, Table, Button, Modal, Form, Row, Col, Spinner, Badge } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import api from '../../api';
+import api from '../../../api';
 import { toast } from 'react-toastify';
 
 const AdminDashboard = () => {

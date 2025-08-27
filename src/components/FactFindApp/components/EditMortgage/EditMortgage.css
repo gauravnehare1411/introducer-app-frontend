@@ -1,0 +1,227 @@
+/* Edit Mortgage Container */
+.user-details-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+/* Title */
+.mortgage-details-title {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 30px !important;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+/* Table Styling */
+.user-details-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.user-details-table th,
+.user-details-table td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.user-details-table th {
+  background-color: #f1f3f5;
+  font-weight: 600;
+  color: #495057;
+  width: 35%;
+  min-width: 150px;
+}
+
+.user-details-table tr:last-child th,
+.user-details-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Form Elements */
+.inp-data {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e9ecef;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.inp-data:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+.inp-data[type="number"]::-webkit-outer-spin-button,
+.inp-data[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+select.inp-data {
+  background-color: white;
+  cursor: pointer;
+}
+
+/* Buttons */
+.user-details-table button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 120px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.user-details-table button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.user-details-table button:active {
+  transform: translateY(0);
+}
+
+.user-details-table button[style*="background: red"] {
+  background: #dc3545 !important;
+}
+
+.user-details-table button[style*="background: green"] {
+  background: #28a745 !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .user-details-container {
+    padding: 15px;
+  }
+  
+  .mortgage-details-title {
+    font-size: 1.5rem;
+    margin-top: 30px !important;
+    margin-bottom: 20px !important;
+  }
+  
+  .user-details-table {
+    display: block;
+    overflow-x: auto;
+    border-radius: 8px;
+  }
+  
+  .user-details-table th,
+  .user-details-table td {
+    padding: 12px 10px;
+    font-size: 14px;
+  }
+  
+  .user-details-table th {
+    width: 40%;
+    min-width: 120px;
+  }
+  
+  .inp-data {
+    padding: 10px;
+    font-size: 13px;
+  }
+  
+  .user-details-table button {
+    padding: 10px 16px;
+    font-size: 13px;
+    width: 100px;
+  }
+}
+
+@media (max-width: 576px) {
+  .user-details-container {
+    padding: 10px;
+  }
+  
+  .mortgage-details-title {
+    font-size: 1.3rem;
+    margin-top: 20px !important;
+  }
+  
+  .user-details-table {
+    border-radius: 6px;
+  }
+  
+  .user-details-table th,
+  .user-details-table td {
+    padding: 10px 8px;
+    font-size: 13px;
+  }
+  
+  .user-details-table th {
+    width: 45%;
+    min-width: 100px;
+  }
+  
+  .inp-data {
+    padding: 8px;
+    font-size: 12px;
+  }
+  
+  .user-details-table button {
+    padding: 8px 12px;
+    font-size: 12px;
+    width: 90px;
+  }
+  
+  /* Stack buttons on mobile */
+  .user-details-table tr:last-child td,
+  .user-details-table tr:last-child th {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .user-details-table tr:last-child td {
+    margin-top: 10px;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .user-details-table {
+    border: 2px solid #000;
+  }
+  
+  .user-details-table th {
+    background-color: #000;
+    color: #fff;
+  }
+  
+  .inp-data {
+    border: 2px solid #000;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .inp-data,
+  .user-details-table button {
+    transition: none;
+  }
+  
+  .user-details-table button:hover {
+    transform: none;
+  }
+}
+

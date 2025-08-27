@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Badge, Spinner } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import api from '../../api';
+import api from '../../../api';
 import ReferralDetailsModal from './ReferralDetailsModal';
 
 const UserDetails = () => {

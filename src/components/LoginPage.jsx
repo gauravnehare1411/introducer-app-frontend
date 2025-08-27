@@ -28,14 +28,16 @@ const LoginPage = ({ onLogin }) => {
 
       localStorage.setItem('access_token', res.data.access_token);
       localStorage.setItem('refresh_token', res.data.refresh_token);
-      localStorage.setItem('role', res.data.role);
+      localStorage.setItem('roles', JSON.stringify(res.data.roles));
 
       onLogin();
       toast.success("Logged in successful.");
-      if (res.data.role?.toLowerCase() === 'admin') {
-        navigate('/admin-dashboard');
+      if (res.data.roles?.includes('admin')) {
+        navigate('/admin');
+      } else if (res.data.roles?.includes('customer'))  {
+        navigate('/mortgage');
       } else {
-        navigate('/');
+        navigate('/introducer');
       }
     } catch (err) {
       setError('Login failed: ' + (err.response?.data?.detail || 'Wrong email or password'));
@@ -46,10 +48,9 @@ const LoginPage = ({ onLogin }) => {
     <div className="d-flex justify-content-center bg-light py-5 px-2 min-vh-100">
       <Card className="shadow-lg w-100 mx-2 px-3 py-4" style={{ maxWidth: '700px', borderRadius: '20px' }}>
         <Card.Body>
-          <h3 className="text-center mb-3" style={{ color: '#391856' }}>Login as an Introducer</h3>
+          <h3 className="text-center mb-3" style={{ color: '#391856' }}>Sign In</h3>
           <p className="text-muted text-center mb-4">
-            Introducers are professionals or partners who refer potential mortgage clients to us.
-            By logging in, you can submit referrals, track their progress, and earn rewards for each successful referral.
+            Sign in as an Introducer or a Customer
           </p>
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
@@ -91,8 +92,8 @@ const LoginPage = ({ onLogin }) => {
           </Form>
           <div className="text-center mt-4">
             <span className="text-secondary">Not registered as an introducer?</span>{' '}
-            <Link to="/register" className="text-decoration-none" style={{ color: '#FF6210', fontWeight: 'bold' }}>
-              Click here to register
+            <Link to="/sign-up" className="text-decoration-none" style={{ color: '#FF6210', fontWeight: 'bold' }}>
+              Sign up
             </Link>
           </div>
         </Card.Body>

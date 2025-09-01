@@ -45,10 +45,11 @@ export default function Application() {
 
   const handleDelete = async (applicationId) => {
     try {
-      await api.delete(`/mortgage-application/${applicationId}`);
+      await api.delete(`/user/mortgage-application/${applicationId}`);
       setUserDetails(prev => prev.filter(app => app._id !== applicationId));
       setSelectedMortgage(null);
       setSelectedNewMortgage(null);
+      toast.success("Application deleted successfully.");
     } catch (error) {
       console.error('Error deleting application:', error);
     }

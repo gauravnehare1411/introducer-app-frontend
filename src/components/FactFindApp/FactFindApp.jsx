@@ -1,7 +1,7 @@
 // InnerApp.js
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import MortgageApplicationForm from './components/MortgageApp/MortgageApplication';
+import MortgageApplicationForm from './components/MortgageApp/MortgageApplication/MortgageApplicationForm';
 import Applications from './components/Applications/Applications';
 import EditMortgage from './components/EditMortgage/EditMortgage';
 import EditNewMortgage from './components/EditNewMortgage/EditNewMortgage';

@@ -4,13 +4,13 @@ import { useNavigate, Link } from 'react-router-dom';
 import api from '../api';
 import { toast } from 'react-toastify';
 
-const RegisterPage = ({ onRegister }) => {
+const IntroducerRegister = ({ onRegister }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     contactnumber: '',
     password: '',
-    roles: ['customer'],
+    roles: ['user'],
   });
 
   const [error, setError] = useState('');
@@ -48,7 +48,7 @@ const RegisterPage = ({ onRegister }) => {
       localStorage.setItem('roles', JSON.stringify(res.data.roles));
       onRegister();
       toast.success('Registration successful!');
-      navigate('/mortgage');
+      navigate('/introducer');
     } catch (err) {
       toast.error('Verification failed: ' + (err.response?.data?.detail || 'Unknown error'));
     }
@@ -68,9 +68,9 @@ const RegisterPage = ({ onRegister }) => {
       <div className="d-flex justify-content-center">
         <Card className="shadow-lg p-4 w-100" style={{ maxWidth: '700px', borderRadius: '20px' }}>
           <Card.Body>
-            <h3 className="text-center mb-3" style={{ color: '#391856' }}>Customer</h3>
+            <h3 className="text-center mb-3" style={{ color: '#391856' }}>Introducer</h3>
             <p className="text-muted text-center mb-4">
-              Sign up as a Customer
+              Sign up as an Introducer, refer your friends or family, track your referrals
             </p>
             <Form onSubmit={handleRegister}>
               {/* Name */}
@@ -168,4 +168,4 @@ const RegisterPage = ({ onRegister }) => {
   );
 };
 
-export default RegisterPage;
+export default IntroducerRegister;

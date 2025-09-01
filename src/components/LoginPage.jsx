@@ -92,7 +92,7 @@ const LoginPage = ({ onLogin }) => {
           </Form>
           <div className="text-center mt-4">
             <span className="text-secondary">Not registered as an introducer?</span>{' '}
-            <Link to="/sign-up" className="text-decoration-none" style={{ color: '#FF6210', fontWeight: 'bold' }}>
+            <Link to="/customer/sign-up" className="text-decoration-none" style={{ color: '#FF6210', fontWeight: 'bold' }}>
               Sign up
             </Link>
           </div>

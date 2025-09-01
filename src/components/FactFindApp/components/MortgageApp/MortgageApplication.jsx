@@ -37,25 +37,11 @@ const MortgageApplicationForm = () => {
   const [newPaymentMethod, setNewPaymentMethod] = useState('');
   const [reference1, setReference1] = useState('');
   const [reference2, setReference2] = useState('');
-  const [showQuestions, setShowQuestions] = useState(true);
+  const [showQuestions, setShowQuestions] = useState(false);
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      const submittedData = localStorage.getItem('submittedData');
-      if (submittedData) {
-        setShowQuestions(false);
-      }
-    }
-  }, [isLoggedIn]);
-
   const viewResponses = () => {
-    const submittedData = localStorage.getItem('submittedData');
-    if (submittedData) {
-      navigate("/mortgage/applications");
-    } else {
-      toast.error("No application found.")
-    }
+    navigate("/mortgage/applications");
   };
 
   useEffect(() => {
@@ -172,6 +158,10 @@ const MortgageApplicationForm = () => {
     setShowQuestions(false);
   };
 
+  const startApplication = () => {
+    setShowQuestions(true);
+  };
+
   if (!isLoggedIn || !isCustomer) {
     return (
       <div className="main-div">
@@ -189,33 +179,33 @@ const MortgageApplicationForm = () => {
   return (
     <div className="main-div">
       <div className="home">
-        <table className="table w-75">
-          {isLoggedIn && showQuestions && (
-            <>
-                <tr className="st-item">
-                  <td><label>Do you have an existing mortgage?</label></td>
-                  <td>
-                    <label>
-                      <input
-                        type="radio"
-                        name="mortgage"
-                        value="yes"
-                        required
-                        onChange={() => handleMortgageSelection(true)}
-                      />
-                      Yes
-                    </label>
-                    <label>
-                      <input
-                        type="radio"
-                        name="mortgage"
-                        value="no"
-                        onChange={() => handleMortgageSelection(false)}
-                      />
-                      No
-                    </label>
-                  </td>
-                </tr>
+        {showQuestions ? (
+          <>
+            <table className="table w-75">
+              <tr className="st-item">
+                <td><label>Do you have an existing mortgage?</label></td>
+                <td>
+                  <label>
+                    <input
+                      type="radio"
+                      name="mortgage"
+                      value="yes"
+                      required
+                      onChange={() => handleMortgageSelection(true)}
+                    />
+                    Yes
+                  </label>
+                  <label>
+                    <input
+                      type="radio"
+                      name="mortgage"
+                      value="no"
+                      onChange={() => handleMortgageSelection(false)}
+                    />
+                    No
+                  </label>
+                </td>
+              </tr>
               {hasMortgage !== null && (
                 <>
                   {hasMortgage && (
@@ -403,41 +393,37 @@ const MortgageApplicationForm = () => {
                   )}
                 </>
               )}
-            </> 
-          )}
-        </table>
-      {hasMortgage !== null && showQuestions && (
-        <>
-          <div className="nav-buttons">
-            <div>
-              <label htmlFor="agreement-checkbox">
-              <input
-                type="checkbox"
-                id="agreement-checkbox"
-                onChange={(e) => setIsCheckboxChecked(e.target.checked)}
-              />
-              &nbsp;By submitting this form, you agree to our processing of your personal data in accordance with GDPR and our Privacy Policy.
-              </label>
+            </table>
+            
+            <div className="nav-buttons">
+              <div>
+                <label htmlFor="agreement-checkbox">
+                <input
+                  type="checkbox"
+                  id="agreement-checkbox"
+                  onChange={(e) => setIsCheckboxChecked(e.target.checked)}
+                />
+                &nbsp;By submitting this form, you agree to our processing of your personal data in accordance with GDPR and our Privacy Policy.
+                </label>
+              </div>
             </div>
-          </div>
-          <div className="nav-buttons">
-            <div>
-              <button className="back-but" onClick={ handleBack }>Back</button>
+            <div className="nav-buttons">
+              <div>
+                <button className="back-but" onClick={handleBack}>Back</button>
+              </div>
+              <div>
+                  <button className="submit-but" onClick={submitData}>Submit</button>
+              </div>
             </div>
-            <div>
-                <button className="submit-but" onClick={submitData}>Submit</button>
-            </div>
-          </div>
           </>
-        )}
-        {!showQuestions && (
-        <div className="thank-you-message">
-          <h6>Fill your mortgage details here and track your applications.</h6>
-          <div className="navigation-buttons">
-            <button className="edit-resp" onClick={() => setShowQuestions(true)}>Apply</button>
-            <button className="view-resp" onClick={viewResponses}>View Applications</button>
+        ) : (
+          <div className="thank-you-message">
+            <h6>Fill your mortgage details here and track your applications.</h6>
+            <div className="navigation-buttons">
+              <button className="edit-resp" onClick={startApplication}>Apply</button>
+              <button className="view-resp" onClick={viewResponses}>View Applications</button>
+            </div>
           </div>
-        </div>
         )}
       </div>
     </div>

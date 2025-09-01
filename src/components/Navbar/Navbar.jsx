@@ -64,13 +64,13 @@ const AppNavbar = ({ isLoggedIn, setIsLoggedIn, userRoles, setUserRoles }) => {
                 <>
                   {hasRole("customer") && (
                     <Nav.Link as={Link} to="/mortgage" onClick={closeNavbar}>
-                      Client Area
+                      Customer Area
                     </Nav.Link>
                   )}
 
                   {hasRole("user") && (
                     <Nav.Link as={Link} to="/introducer" onClick={closeNavbar}>
-                      Introducer
+                      Introducer/Refer
                     </Nav.Link>
                   )}
 
@@ -102,11 +102,13 @@ const AppNavbar = ({ isLoggedIn, setIsLoggedIn, userRoles, setUserRoles }) => {
               ) : (
                 <>
                   <Nav.Link as={Link} to="/sign-in" onClick={closeNavbar}>
-                    Sign In
+                    Login
                   </Nav.Link>
-                  /
-                  <Nav.Link as={Link} to="/sign-up" onClick={closeNavbar}>
-                    Sign Up
+                  <Nav.Link as={Link} to="/introducer/sign-up" onClick={closeNavbar}>
+                    Introducer
+                  </Nav.Link>
+                  <Nav.Link as={Link} to="/customer/sign-up" onClick={closeNavbar}>
+                    Customer
                   </Nav.Link>
                 </>
               )}

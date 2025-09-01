@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Table, Card, Spinner, Button, Col, Row, Modal } from 'react-bootstrap';
 import api from '../../../api';
 import { useNavigate } from 'react-router-dom';
+import { Trash } from 'react-bootstrap-icons';
+import { toast } from 'react-toastify';
 
 const MyReferrals = () => {
   const [referrals, setReferrals] = useState([]);
@@ -72,6 +74,20 @@ const MyReferrals = () => {
     }
   };
 
+  const handleDelete = async (ref) => {
+    if (!window.confirm("Are you sure you want to delete referral")) return;
+
+    try {
+      await api.delete(`/delete-referral/${ref._id}`);
+      setReferrals((prev) => prev.filter(r => r._id !== ref._id))
+      toast.success("Referral deleted successfully.");
+    }
+    catch (err) {
+      console.log("Failed to delete referral:", err);
+      toast.error('Failed to delete referral. Please try again.');
+    }
+  }
+
   const closeDetails = () => {
     setShowDetails(false);
     setDetails(null);
@@ -94,12 +110,13 @@ const MyReferrals = () => {
                 <th>Email</th>
                 <th>Status</th>
                 <th>Created At</th>
+                <th style={{width: 60, textAlign: "center"}}>Delete</th>
               </tr>
             </thead>
             <tbody>
               {referrals.map((r, index) => (
                 <tr
-                  key={r.id || r._id || index}
+                  key={r._id || index}
                   style={{ cursor: 'pointer' }}
                   onClick={() => openDetails(r)}
                   title="Click to view details"
@@ -109,6 +126,18 @@ const MyReferrals = () => {
                   <td>{r.referralEmail}</td>
                   <td>{r.status}</td>
                   <td>{formatCreatedAtUK(r.created_at)}</td>
+                  <td>
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(r);
+                      }}
+                    >
+                      <Trash />
+                    </Button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -116,15 +145,10 @@ const MyReferrals = () => {
         )}
       </Card.Body>
 
-      <Row className="px-3 pb-3">
-        <Col xs="6" className="text-start">
-          <Button variant="secondary" onClick={() => navigate(-1)}>Back</Button>
-        </Col>
-        <Col xs="6" className="text-end">
+      <Row className="px-3 pb-3 m-auto">
           <Button variant="success" onClick={() => navigate('/introducer/refer')}>
             Refer Friend or Family
           </Button>
-        </Col>
       </Row>
 
       {/* Details Modal */}

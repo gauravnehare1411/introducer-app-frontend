@@ -12,6 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import FactFindApp from './components/FactFindApp/FactFindApp';
 import AdminApp from './components/AdminApp/AdminApp';
 import IntroducerApp from './components/IntroducerApp/IntroducerApp';
+import IntroducerRegister from './components/IntroducerRegister';
 
 
 function App() {
@@ -41,7 +42,8 @@ function App() {
                 }}
             />}
           />
-          <Route path="/sign-up" element={
+
+          <Route path="/customer/sign-up" element={
             <RegisterPage 
               onRegister={
                 () => {
@@ -50,6 +52,17 @@ function App() {
                 }}
             />}
           />
+
+          <Route path="/introducer/sign-up" element={
+            <IntroducerRegister
+              onRegister={
+                () => {
+                  setIsLoggedIn(true);
+                  setUserRoles(JSON.parse(localStorage.getItem('roles') || '[]'));
+                }}
+            />}
+          />
+
           <Route path='/reset-password' element={<ResetPasswordPage />} />
 
           <Route

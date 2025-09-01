@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
 import api from '../../../api';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const MortgageReferralForm = () => {
   const [formData, setFormData] = useState({
     firstName: '', lastName: '', referralPhone: '', referralEmail: '', purpose: '', comment: '',
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -20,6 +23,7 @@ const MortgageReferralForm = () => {
       
       toast.success('Referral submitted successfully!');
       setFormData({firstName: '', lastName: '', referralPhone: '', referralEmail: '', purpose: '', comment: ''});
+      navigate('/introducer')
     } catch (error) {
       if (error.response) {
           toast.error('Something went wrong. Please try again later.');
@@ -46,8 +50,8 @@ const MortgageReferralForm = () => {
           </Row>
           <Row className="mb-3">
             <Col>
-              <Form.Label>Phone</Form.Label>
-              <Form.Control type="tel" name="referralPhone" value={formData.referralPhone} onChange={handleChange} />
+              <Form.Label>Phone *</Form.Label>
+              <Form.Control type="tel" name="referralPhone" value={formData.referralPhone} onChange={handleChange} required />
             </Col>
             <Col>
               <Form.Label>Email *</Form.Label>

@@ -120,7 +120,6 @@ select.inp-data {
   }
   
   .user-details-table {
-    display: block;
     overflow-x: auto;
     border-radius: 8px;
   }
@@ -132,7 +131,7 @@ select.inp-data {
   }
   
   .user-details-table th {
-    width: 40%;
+    width: 100%;
     min-width: 120px;
   }
   
@@ -169,7 +168,7 @@ select.inp-data {
   }
   
   .user-details-table th {
-    width: 45%;
+    width: 100%;
     min-width: 100px;
   }
   

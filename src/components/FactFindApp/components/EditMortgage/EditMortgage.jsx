@@ -140,7 +140,7 @@ export default function EditMortgage() {
             {applicationType === 'existing' ? (
                 <table className="user-details-table">
                     <tbody>
-                        <tr>
+                        <tr className='st-item'>
                             <th>Application ID</th>
                             <td>{applicationId}</td>
                         </tr>

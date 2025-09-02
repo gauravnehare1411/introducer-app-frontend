@@ -193,7 +193,7 @@ const MortgageApplicationForm = () => {
       <Container className="my-4">
         {showQuestions ? (
           <>
-            <Table striped bordered className="w-75 mx-auto">
+            <Table bordered className="w-75 mx-auto">
               <tbody>
                 <tr>
                   <td><Form.Label>Do you have an existing mortgage?</Form.Label></td>

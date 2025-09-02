@@ -1,3 +1,31 @@
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.close-x-button {
+  background: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-x-button:hover {
+  background: #cc0000;
+}
+
+.mortgage-detail-popup table tr:last-child td {
+  text-align: center;
+  padding-top: 15px;
+}
+
+
 .profile-container {
   max-width: 900px;
   margin: 40px auto;

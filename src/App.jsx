@@ -31,7 +31,7 @@ function App() {
   return (
     <Router basename='app'>
       <AppNavbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} userRoles={userRoles} setUserRoles={setUserRoles}/>
-      <Container>
+      <Container style={{ paddingTop: "80px" }}>
         <Routes>
           <Route path="/sign-in" element={
             <LoginPage

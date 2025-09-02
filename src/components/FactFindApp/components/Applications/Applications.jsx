@@ -120,7 +120,15 @@ export default function Application() {
 
           {selectedMortgage && (
             <div className="mortgage-detail-popup">
-              <h2>Existing Mortgage Details</h2>
+              <div className="popup-header">
+                <h2>Existing Mortgage Details</h2>
+                <button 
+                  className="close-x-button"
+                  onClick={() => setSelectedMortgage(null)}
+                >
+                  X
+                </button>
+              </div>
               <table>
                 <tr><th>Application ID</th><td>{selectedMortgage._id}</td></tr>
                 <tr><th>Status</th><td>{selectedMortgage.status}</td></tr>
@@ -136,8 +144,11 @@ export default function Application() {
                 <tr><th>Renewal Date</th><td>{selectedMortgage.renewalDate}</td></tr>
                 <tr><th>Reference</th><td>{selectedMortgage.reference1}</td></tr>
                 <tr>
-                  <td><button className="mortgage-close-button" onClick={() => setSelectedMortgage(null)}>Close</button></td>
-                  <td><button className="mortgage-edit-button" onClick={() => handleEditApplication(selectedMortgage)}>Edit</button></td>
+                  <td colSpan="2">
+                    <button className="mortgage-edit-button" onClick={() => handleEditApplication(selectedMortgage)}>
+                      Edit
+                    </button>
+                  </td>
                 </tr>
               </table>
             </div>
@@ -145,7 +156,15 @@ export default function Application() {
 
           {selectedNewMortgage && (
             <div className="mortgage-detail-popup">
-              <h2>New Mortgage Application Details</h2>
+              <div className="popup-header">
+                <h2>New Mortgage Application Details</h2>
+                <button 
+                  className="close-x-button"
+                  onClick={() => setSelectedNewMortgage(null)}
+                >
+                  X
+                </button>
+              </div>
               <table>
                 <tr><th>Application ID</th><td>{selectedNewMortgage._id}</td></tr>
                 <tr><th>Status</th><td>{selectedNewMortgage.status}</td></tr>
@@ -162,8 +181,11 @@ export default function Application() {
                 <tr><th>Payment Method</th><td>{selectedNewMortgage.newPaymentMethod}</td></tr>
                 <tr><th>Reference</th><td>{selectedNewMortgage.reference2}</td></tr>
                 <tr>
-                  <td><button className="mortgage-close-button" onClick={() => setSelectedNewMortgage(null)}>Close</button></td>
-                  <td><button className="mortgage-edit-button" onClick={() => handleEditApplication(selectedNewMortgage)}>Edit</button></td>
+                  <td colSpan="2">
+                    <button className="mortgage-edit-button" onClick={() => handleEditApplication(selectedNewMortgage)}>
+                      Edit
+                    </button>
+                  </td>
                 </tr>
               </table>
             </div>

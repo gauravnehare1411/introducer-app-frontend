@@ -1,0 +1,35 @@
+/* src/components/Navbar/Navbar.css */
+:root {
+  --navbar-height: 64px;
+}
+
+.navbar-scroll {
+  height: var(--navbar-height);
+  transition: transform 200ms ease-in-out, box-shadow 200ms ease-in-out;
+  transform: translateY(0);
+  will-change: transform;
+  z-index: 1100;
+}
+
+.navbar-scroll.navbar-hidden {
+  transform: translateY(calc(-1 * var(--navbar-height)));
+}
+
+/* visible state */
+.navbar-scroll.navbar-visible {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06); /* subtle shadow when visible */
+}
+
+/* keep brand vertically centered (optional) */
+.navbar-brand-flex {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+@media (max-width: 991px) {
+  .navbar-scroll .navbar-collapse {
+    background-color: #f8f9fa;
+  }
+}

@@ -61,17 +61,8 @@ const MyReferrals = () => {
   const openDetails = async (ref) => {
     setShowDetails(true);
     setDetailsLoading(true);
-    setDetails(null);
-    try {
-      const id = ref.id || ref._id || ref.referralId;
-      const { data } = await api.get(`/referrals/${id}`);
-      setDetails(data);
-    } catch (e) {
-      console.error('Failed to fetch referral details:', e);
-      setDetails(ref);
-    } finally {
-      setDetailsLoading(false);
-    }
+    setDetails(ref);    
+    setDetailsLoading(false);
   };
 
   const handleDelete = async (ref) => {
@@ -100,7 +91,7 @@ const MyReferrals = () => {
         {loading ? (
           <div className="text-center"><Spinner animation="border" /></div>
         ) : referrals.length === 0 ? (
-          <p className="text-center">No referrals found.</p>
+          <p className="text-center">Click bellow button to refer a friend or family.</p>
         ) : (
           <Table bordered hover responsive>
             <thead>

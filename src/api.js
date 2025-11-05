@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://tin-webcast-laboratories-francis.trycloudflare.com/',
+  baseURL: 'http://127.0.0.1:8000/',
 });
 
 let isRefreshing = false;
@@ -71,7 +71,7 @@ api.interceptors.response.use(
       
       try {
         const response = await axios.post(
-          'https://tin-webcast-laboratories-francis.trycloudflare.com/token/refresh',
+          'http://127.0.0.1:8000/token/refresh',
           { refresh_token: refreshToken }
         );
         

@@ -138,7 +138,6 @@ const Applications = () => {
             <tr>
               <th style={{ width: 60 }}>#</th>
               <th>Referral Id</th>
-              <th>Referrer Name</th>
               <th>Name</th>
               <th>Email</th>
               <th>Purpose</th>
@@ -156,7 +155,6 @@ const Applications = () => {
               >
                 <td>{idx + 1}</td>
                 <td>{r.referralId}</td>
-                <td>{r.referrerName}</td>
                 <td>{r.firstName} {r.lastName}</td>
                 <td>{r.referralEmail}</td>
                 <td>{r.purpose || '—'}</td>

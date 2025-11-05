@@ -25,7 +25,7 @@ const AdminDashboard = () => {
     const load = async () => {
       try {
         setLoadingList(true);
-        const res = await api.get('/admin/users');
+        const res = await api.get(`/admin/users/${'user'}`);
         setUsers(res.data || []);
       } catch (err) {
         console.error(err);
@@ -43,7 +43,7 @@ const AdminDashboard = () => {
 
   // --- Edit ---
   const openEditModal = (e, user) => {
-    e.stopPropagation(); // don't trigger row navigation
+    e.stopPropagation();
     setSelectedUser(user);
     setEditForm({
       name: user?.name || '',
@@ -124,8 +124,8 @@ const AdminDashboard = () => {
 
   return (
     <Container className="mt-4">
-      <h2 className="mb-4">Registered Users</h2>
-      <Badge className="m-2 p-2" bg="primary" pill title="Total users">Total User - {totalUsers}</Badge>
+      <h2 className="mb-4">Introducers</h2>
+      <Badge className="m-2 p-2" bg="primary" pill title="Total users">Total Introducers - {totalUsers}</Badge>
       <Button
         variant="outline-secondary"
         className='m-2'
@@ -135,9 +135,9 @@ const AdminDashboard = () => {
       </Button>
       <Button
         variant="outline-secondary"
-        onClick={() => navigate('/admin/registrations')}
+        onClick={() => navigate('/admin/customers')}
       >
-        Registrations
+        Customer
       </Button>
       {loadingList ? (
         <div className="d-flex justify-content-center py-5">

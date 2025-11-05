@@ -1,10 +1,9 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000',
+  baseURL: 'https://tin-webcast-laboratories-francis.trycloudflare.com/',
 });
 
-// Variables for token refresh management
 let isRefreshing = false;
 let failedQueue = [];
 
@@ -19,7 +18,6 @@ const processQueue = (error, token = null) => {
   failedQueue = [];
 };
 
-// Interceptor to attach token
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('access_token');
@@ -28,9 +26,6 @@ api.interceptors.request.use(
 
     if (token && !isAuthEndpoint) {
       config.headers.Authorization = `Bearer ${token}`;
-      console.log('✅ Token attached to:', config.url);
-    } else {
-      console.log('🚫 Token not attached to:', config.url);
     }
 
     return config;
@@ -40,21 +35,17 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response) => {
-    console.log('✅ Response received:', response.status, response.config.url);
     return response;
   },
   async (error) => {
-    console.log('❌ Error:', error.response?.status, error.config?.url);
-    console.log('🔄 Checking for refresh token...');
     
     const originalRequest = error.config;
+    const skipAuth = ['/token', '/register'];
+    const isAuthEndpoint = skipAuth.some(url => originalRequest.url.includes(url));
     
-    // If error is 401 and we haven't already tried to refresh
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      console.log('🔄 Attempting token refresh...');
+    if (error.response?.status === 401 && !originalRequest._retry && !isAuthEndpoint) {
       
       if (isRefreshing) {
-        console.log('⏳ Refresh already in progress, adding to queue');
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         }).then(token => {
@@ -68,62 +59,45 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       isRefreshing = true;
       
-      // DEBUG: Check what's actually in localStorage
-      console.log('🔍 LocalStorage contents:');
-      console.log('access_token:', localStorage.getItem('access_token'));
-      console.log('refresh_token:', localStorage.getItem('refresh_token'));
-      console.log('roles:', localStorage.getItem('roles'));
-      
       const refreshToken = localStorage.getItem('refresh_token');
       
-      // FIX: Better check for refresh token existence
       if (!refreshToken || refreshToken === 'null' || refreshToken === 'undefined') {
-        console.log('❌ No valid refresh token available');
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         localStorage.removeItem('roles');
-        window.location.href = '/app/sign-in';
+        window.location.href = '/portal/auth';
         return Promise.reject(error);
       }
       
       try {
-        console.log('🔄 Requesting new tokens with refresh token');
-        
-        // Request new tokens using refresh token
         const response = await axios.post(
-          'https://introducer-app-backend.onrender.com/token/refresh',
+          'https://tin-webcast-laboratories-francis.trycloudflare.com/token/refresh',
           { refresh_token: refreshToken }
         );
         
-        console.log('✅ Token refresh successful:', response.data);
-        
-        const { access_token, refresh_token, roles } = response.data;
+        const { access_token, refresh_token, token_type, expires_in, roles } = response.data;
         
         localStorage.setItem('access_token', access_token);
         localStorage.setItem('refresh_token', refresh_token);
-        
+        localStorage.setItem('token_type', token_type);
+        localStorage.setItem('expires_in', expires_in);
+
         if (roles) {
           localStorage.setItem('roles', JSON.stringify(roles));
         }
         
-        // Update the authorization header
         api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
         originalRequest.headers.Authorization = `Bearer ${access_token}`;
         
-        // Process any queued requests
         processQueue(null, access_token);
         
-        // Retry the original request
-        console.log('🔄 Retrying original request:', originalRequest.url);
         return api(originalRequest);
       } catch (refreshError) {
-        console.error('❌ Token refresh failed:', refreshError.response?.data);
-        // Refresh token is invalid, redirect to login
         processQueue(refreshError, null);
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         localStorage.removeItem('roles');
-        window.location.href = '/app/sign-in';
+        window.location.href = '/portal/auth';
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

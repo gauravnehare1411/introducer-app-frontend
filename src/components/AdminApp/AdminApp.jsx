@@ -4,7 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import AdminDashboard from './components/AdminDashboard';
 import UserDetails from './components/UserDetails';
 import Applications from './components/Applications';
-import Registrations from './components/Registrations';
+import Customers from './components/Customers';
 
 
 const AdminApp = () => {
@@ -14,7 +14,7 @@ const AdminApp = () => {
         <Route path="/" element={<AdminDashboard />} />
         <Route path="/user/:referralId" element={<UserDetails />} />
         <Route path="/applications" element={<Applications />} />
-         <Route path="/registrations" element={<Registrations />} />
+         <Route path="/customers" element={<Customers />} />
       </Routes>
     </div>
   );

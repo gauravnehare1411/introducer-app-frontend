@@ -3,7 +3,7 @@ import api from "../../../api";
 import { Container, Table, Spinner, Alert, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-export default function Registrations() {
+export default function Customers() {
   const [registrations, setRegistrations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -12,7 +12,7 @@ export default function Registrations() {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await api.get("/admin/registrations");
+        const res = await api.get(`/admin/users/${"customer"}`);
         setRegistrations(res.data || []);
       } catch (err) {
         console.error("Error fetching registrations:", err);
@@ -42,6 +42,10 @@ export default function Registrations() {
     );
   }
 
+  const handleRowClick = (userId) => {
+    navigate(`/admin/customer-applications/${userId}`);
+  }
+
   return (
     <>
     <Container className="py-5">
@@ -56,16 +60,16 @@ export default function Registrations() {
               <th>Full Name</th>
               <th>Email</th>
               <th>Phone</th>
-              <th>Mortgage Type</th>
+              <th>referralId</th>
             </tr>
           </thead>
           <tbody>
             {registrations.map((reg) => (
-              <tr key={reg._id}>
-                <td>{reg.fullname}</td>
+              <tr key={reg._id} onClick={() => handleRowClick(reg.userId)}>
+                <td>{reg.name}</td>
                 <td>{reg.email}</td>
-                <td>{reg.phone}</td>
-                <td className="text-capitalize">{reg.mortgageType}</td>
+                <td>{reg.contactnumber}</td>
+                <td className="text-capitalize">{reg.referralId}</td>
               </tr>
             ))}
           </tbody>

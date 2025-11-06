@@ -1,10 +1,14 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { Container, Table, Button, Modal, Form, Row, Col, Spinner, Badge } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import api from '../../../api';
 import { toast } from 'react-toastify';
+import NavigationButtons from './inc/NavigationButtons';
+import Introducers from './inc/Introducers';
+import EditModal from './inc/EditModal';
+import Customers from './inc/Customers';
 
 const AdminDashboard = () => {
+  const [selectedView, setSelectedView] = useState('introducers');
   const [users, setUsers] = useState([]);
   const [loadingList, setLoadingList] = useState(true);
 
@@ -22,6 +26,7 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (selectedView !== 'introducers') return;
     const load = async () => {
       try {
         setLoadingList(true);
@@ -35,7 +40,7 @@ const AdminDashboard = () => {
       }
     };
     load();
-  }, []);
+  }, [selectedView]);
 
   const handleRowClick = (referralId) => {
     navigate(`/admin/user/${referralId}`);
@@ -106,7 +111,7 @@ const AdminDashboard = () => {
 
   // --- Delete ---
   const handleDelete = async (e, userId) => {
-    e.stopPropagation(); // don't trigger row navigation
+    e.stopPropagation();
     const confirmed = window.confirm('Are you sure you want to delete this user?');
     if (!confirmed) return;
 
@@ -122,127 +127,41 @@ const AdminDashboard = () => {
 
   const totalUsers = users.length;
 
+  const renderView = () => {
+    switch (selectedView) {
+      case 'introducers':
+        return (
+          <>
+            <Introducers
+              totalUsers={totalUsers}
+              users={users}
+              openEditModal={openEditModal}
+              handleRowClick={handleRowClick}
+              handleDelete={handleDelete}
+              loadingList={loadingList}
+            />
+            <EditModal
+              showEdit={showEdit}
+              closeEditModal={closeEditModal}
+              handleEditChange={handleEditChange}
+              editForm={editForm}
+              saveUser={saveUser}
+              saving={saving}
+              hasChanges={hasChanges}
+            />
+          </>
+        );
+      case 'customers':
+        return <Customers />;
+      default:
+        return null;
+    }
+  };
   return (
-    <Container className="mt-4">
-      <h2 className="mb-4">Introducers</h2>
-      <Badge className="m-2 p-2" bg="primary" pill title="Total users">Total Introducers - {totalUsers}</Badge>
-      <Button
-        variant="outline-secondary"
-        onClick={() => navigate('/admin/customers')}
-      >
-        Customer
-      </Button>
-      <Button
-        variant="outline-secondary"
-        className='m-2'
-        onClick={() => navigate('/admin/applications')}
-      >
-        Applications
-      </Button>
-      {loadingList ? (
-        <div className="d-flex justify-content-center py-5">
-          <Spinner animation="border" role="status" />
-        </div>
-      ) : (
-        <Table striped bordered hover responsive>
-          <thead>
-            <tr>
-              <th style={{ width: 60 }}>#</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Contact Number</th>
-              <th>Referral ID</th>
-              <th style={{ width: 170 }}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user, index) => (
-              <tr
-                key={user._id}
-                style={{ cursor: 'pointer' }}
-                onClick={() => handleRowClick(user.referralId)}
-              >
-                <td>{index + 1}</td>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{user.contactnumber}</td>
-                <td>{user.referralId}</td>
-                <td className="d-flex gap-2">
-                  <Button
-                    size="sm"
-                    variant="outline-primary"
-                    onClick={(e) => openEditModal(e, user)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline-danger"
-                    onClick={(e) => handleDelete(e, user._id)}
-                  >
-                    Delete
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      )}
-
-      {/* Edit User Modal */}
-      <Modal show={showEdit} onHide={closeEditModal} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit User</Modal.Title>
-        </Modal.Header>
-
-        <Modal.Body>
-          <Form>
-            <Row>
-              {/* Editable */}
-              <Col md={6} className="mb-3">
-                <Form.Label>Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="name"
-                  value={editForm.name}
-                  onChange={handleEditChange}
-                  placeholder="Enter full name"
-                />
-              </Col>
-              <Col md={6} className="mb-3">
-                <Form.Label>Contact Number</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="contactnumber"
-                  value={editForm.contactnumber}
-                  onChange={handleEditChange}
-                  placeholder="e.g. +44 7522 405709"
-                />
-              </Col>
-
-              {/* Read-only */}
-              <Col md={6} className="mb-3">
-                <Form.Label>Email (read-only)</Form.Label>
-                <Form.Control type="email" name="email" value={editForm.email} disabled />
-              </Col>
-              <Col md={6} className="mb-3">
-                <Form.Label>Referral ID (read-only)</Form.Label>
-                <Form.Control type="text" name="referralId" value={editForm.referralId} disabled />
-              </Col>
-            </Row>
-          </Form>
-        </Modal.Body>
-
-        <Modal.Footer>
-          <Button variant="secondary" onClick={closeEditModal} disabled={saving}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={saveUser} disabled={saving || !hasChanges}>
-            {saving ? 'Saving…' : 'Save Changes'}
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </Container>
+    <>
+      <NavigationButtons onSelect={setSelectedView} selectedView={selectedView} />
+      {renderView()}
+    </>
   );
 };
 

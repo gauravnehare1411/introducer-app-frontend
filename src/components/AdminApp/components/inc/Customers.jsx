@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import api from "../../../api";
-import { Container, Table, Spinner, Alert, Button } from "react-bootstrap";
+import api from "../../../../api";
+import { Container, Table, Spinner, Alert, Button, Badge } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 export default function Customers() {
@@ -46,10 +46,13 @@ export default function Customers() {
     navigate(`/admin/customer-applications/${userId}`);
   }
 
+  const totalCustomers = registrations.length;
+
   return (
     <>
     <Container className="py-5">
-      <h2 className="mb-4">Registrations</h2>
+      <h2 className="mb-4">Customers</h2>
+      <Badge className="m-2 p-2" bg="primary" pill title="Total users">Total Customers - {totalCustomers}</Badge>
 
       {registrations.length === 0 ? (
         <Alert variant="info">No registrations found.</Alert>
@@ -76,7 +79,6 @@ export default function Customers() {
         </Table>
       )}
     </Container>
-    <Button variant="secondary" style={{float:'right'}} onClick={() => navigate(-1)}>Back</Button>
     </>
   );
 }

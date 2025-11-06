@@ -7,7 +7,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 
   const isAllowed = token && userRoles.some(role => allowedRoles.includes(role));
 
-  return isAllowed ? children : <Navigate to="/register" state={{ from: location }} replace />;
+  return isAllowed ? children : <Navigate to="/customer/sign-up" state={{ from: location }} replace />;
 };
 
 export default ProtectedRoute;

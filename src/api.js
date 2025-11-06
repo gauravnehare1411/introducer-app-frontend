@@ -65,7 +65,7 @@ api.interceptors.response.use(
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         localStorage.removeItem('roles');
-        window.location.href = '/portal/auth';
+        window.location.href = '/app/sign-in';
         return Promise.reject(error);
       }
       
@@ -97,7 +97,7 @@ api.interceptors.response.use(
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         localStorage.removeItem('roles');
-        window.location.href = '/portal/auth';
+        window.location.href = '/app/sign-in';
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

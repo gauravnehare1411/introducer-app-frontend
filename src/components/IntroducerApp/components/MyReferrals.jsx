@@ -14,7 +14,7 @@ const MyReferrals = () => {
   const [detailsLoading, setDetailsLoading] = useState(false);
   const [details, setDetails] = useState(null);
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchReferrals = async () => {
@@ -61,7 +61,7 @@ const MyReferrals = () => {
   const openDetails = async (ref) => {
     setShowDetails(true);
     setDetailsLoading(true);
-    setDetails(ref);    
+    setDetails(ref);
     setDetailsLoading(false);
   };
 
@@ -96,12 +96,12 @@ const MyReferrals = () => {
           <Table bordered hover responsive>
             <thead>
               <tr>
-                <th style={{width: 60}}>#</th>
+                <th style={{ width: 60 }}>#</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Status</th>
                 <th>Created At</th>
-                <th style={{width: 60, textAlign: "center"}}>Delete</th>
+                <th style={{ width: 60, textAlign: "center" }}>Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -137,15 +137,15 @@ const MyReferrals = () => {
       </Card.Body>
 
       <Row className="px-3 pb-3 m-auto">
-          <Button variant="success" onClick={() => navigate('/introducer/refer')}>
-            Refer Friend or Family
-          </Button>
+        <Button variant="success" onClick={() => navigate('/introducer/refer')}>
+          Refer Friend or Family
+        </Button>
       </Row>
 
       {/* Details Modal */}
       <Modal show={showDetails} onHide={closeDetails} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Referral Details</Modal.Title>
+          <Modal.Title className="fs-4 fw-bold">Referral Details</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {detailsLoading ? (
@@ -153,31 +153,31 @@ const MyReferrals = () => {
               <Spinner animation="border" />
             </div>
           ) : !details ? (
-            <div className="text-center text-muted">No details available</div>
+            <div className="text-center text-muted fs-5">No details available</div>
           ) : (
-            <div className="small">
-              <Row className="mb-2">
-                <Col md={5} className="text-muted">Name</Col>
+            <div className="fs-6" style={{ lineHeight: '1.8' }}>
+              <Row className="mb-3">
+                <Col md={5} className="text-muted fw-semibold">Name</Col>
                 <Col md={7}>{details.firstName} {details.lastName}</Col>
               </Row>
-              <Row className="mb-2">
-                <Col md={5} className="text-muted">Email</Col>
+              <Row className="mb-3">
+                <Col md={5} className="text-muted fw-semibold">Email</Col>
                 <Col md={7}>{details.referralEmail}</Col>
               </Row>
-              <Row className="mb-2">
-                <Col md={5} className="text-muted">Contact Number</Col>
+              <Row className="mb-3">
+                <Col md={5} className="text-muted fw-semibold">Contact Number</Col>
                 <Col md={7}>{details.contactnumber || details.referralPhone || '—'}</Col>
               </Row>
-              <Row className="mb-2">
-                <Col md={5} className="text-muted">Status</Col>
+              <Row className="mb-3">
+                <Col md={5} className="text-muted fw-semibold">Status</Col>
                 <Col md={7}>{details.status}</Col>
               </Row>
-              <Row className="mb-2">
-                <Col md={5} className="text-muted">Created At</Col>
+              <Row className="mb-3">
+                <Col md={5} className="text-muted fw-semibold">Created At</Col>
                 <Col md={7}>{formatCreatedAtUK(details.created_at)}</Col>
               </Row>
-              <Row className="mb-2">
-                <Col md={5} className="text-muted">Comment</Col>
+              <Row className="mb-3">
+                <Col md={5} className="text-muted fw-semibold">Comment</Col>
                 <Col md={7} style={{ whiteSpace: 'pre-wrap' }}>
                   {details.comment || details.notes || '—'}
                 </Col>
@@ -185,9 +185,6 @@ const MyReferrals = () => {
             </div>
           )}
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={closeDetails}>Close</Button>
-        </Modal.Footer>
       </Modal>
     </Card>
   );

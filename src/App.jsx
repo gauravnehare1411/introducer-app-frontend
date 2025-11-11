@@ -13,6 +13,7 @@ import FactFindApp from './components/FactFindApp/FactFindApp';
 import AdminApp from './components/AdminApp/AdminApp';
 import IntroducerApp from './components/IntroducerApp/IntroducerApp';
 import IntroducerRegister from './components/IntroducerRegister';
+import HomePage from './components/HomePage';
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
       <AppNavbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} userRoles={userRoles} setUserRoles={setUserRoles}/>
       <Container style={{ paddingTop: "80px" }}>
         <Routes>
+          <Route path='/' element={ <HomePage isLoggedIn={isLoggedIn} userRoles={userRoles} /> } />
           <Route path="/sign-in" element={
             <LoginPage
               onLogin={

@@ -72,6 +72,12 @@ const IntroducerRegister = ({ onRegister }) => {
             <p className="text-muted text-center mb-4">
               Sign up as an Introducer, refer your friends or family, track your referrals
             </p>
+            <div className="text-center mt-4">
+              <span className="text-secondary">Register as a Customer - </span>{' '}
+              <Link to="/customer/sign-up" className="text-decoration-none" style={{ color: '#1410ffff', fontWeight: 'bold' }}>
+                Click Here
+              </Link>
+            </div>
             <Form onSubmit={handleRegister}>
               {/* Name */}
               <Form.Group className="mb-3">

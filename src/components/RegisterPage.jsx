@@ -72,6 +72,12 @@ const RegisterPage = ({ onRegister }) => {
             <p className="text-muted text-center mb-4">
               Sign up as a Customer
             </p>
+            <div className="text-center mt-4">
+              <span className="text-secondary">Register as an Introducer - </span>{' '}
+              <Link to="/introducer/sign-up" className="text-decoration-none" style={{ color: '#1410ffff', fontWeight: 'bold' }}>
+                Click Here
+              </Link>
+            </div>
             <Form onSubmit={handleRegister}>
               {/* Name */}
               <Form.Group className="mb-3">

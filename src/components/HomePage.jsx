@@ -2,13 +2,27 @@ import React from 'react';
 import { Card, Container, Button, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
-const HomePage = () => {
+const HomePage = ({ isLoggedIn, userRoles }) => {
   const navigate = useNavigate();
-  const isLoggedIn = !!localStorage.getItem('access_token');
+
+  const hasRole = (role) => {
+    if (!userRoles) return false;
+    if (Array.isArray(userRoles)) return userRoles.map(r => r.toLowerCase()).includes(role.toLowerCase());
+    return userRoles.toLowerCase() === role.toLowerCase();
+  }
+
+  const handleNavigate = () => {
+    if (hasRole('customer')){
+      navigate('/mortgage');
+    } else if (hasRole('user') ) {
+      navigate('/introducer')
+    }
+  }
+
 
   return (
     <Container className="py-5">
-      <Card className="text-center shadow-lg mb-4">
+      <Card className="text-center shadow-sm mb-4">
         <Card.Header as="h1" style={{backgroundColor: '#f3f3f5ff', color: '#391856'}}>Welcome to AAI Financials!</Card.Header>
         <Card.Body>
           <Card.Text className="fs-5">
@@ -30,19 +44,24 @@ const HomePage = () => {
       </Card>
 
       <Row className="justify-content-center">
-        {!isLoggedIn ? (
+        {!isLoggedIn ?(
           <>
             <Col xs="auto">
-              <Button variant="primary" onClick={() => navigate('/login')}>Login</Button>
+              <Button variant="primary" onClick={() => navigate('/sign-in')}>Login</Button>
             </Col>
             <Col xs="auto">
-              <Button variant="outline-primary" onClick={() => navigate('/register')}>Register</Button>
+              <Button variant="outline-primary" onClick={() => navigate('/customer/sign-up')}>Register</Button>
             </Col>
           </>
         ) : (
           <>
+            <Col xs="auto">
+              <Button variant="primary" onClick={ handleNavigate }>Dashboard</Button>
+            </Col>
           </>
         )}
+
+
       </Row>
     </Container>
   );

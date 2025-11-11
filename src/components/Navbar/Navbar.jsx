@@ -132,8 +132,7 @@ const AppNavbar = ({ isLoggedIn, setIsLoggedIn, userRoles, setUserRoles }) => {
               ) : (
                 <>
                   <Nav.Link as={Link} to="/sign-in" onClick={closeNavbar}>Login</Nav.Link>
-                  <Nav.Link as={Link} to="/introducer/sign-up" onClick={closeNavbar}>Introducer</Nav.Link>
-                  <Nav.Link as={Link} to="/customer/sign-up" onClick={closeNavbar}>Customer</Nav.Link>
+                  <Nav.Link as={Link} to="/customer/sign-up" onClick={closeNavbar}>Register</Nav.Link>
                 </>
               )}
             </Nav>

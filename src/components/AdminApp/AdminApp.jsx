@@ -5,7 +5,7 @@ import AdminDashboard from './components/AdminDashboard';
 import UserDetails from './components/UserDetails';
 import Applications from './components/Applications';
 import Customers from './components/inc/Customers';
-import FactFindApp from './AdminFactFindApp/FactFindApp/FactFindApp';
+import FactFindApp from './FactFindApp/FactFindApp';
 
 
 const AdminApp = () => {

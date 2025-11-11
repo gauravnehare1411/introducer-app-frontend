@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import api from "../../../../../../../api";
+import api from "../../../../../../api";
 
 export default function UploadDocuments() {
   const navigate = useNavigate();

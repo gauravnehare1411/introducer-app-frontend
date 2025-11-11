@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Applications.css';
-import api from '../../../../../../api';
+import api from '../../../../../api';
 import { toast } from 'react-toastify';
 import { Button, } from 'react-bootstrap';
 import FrontMortgage from './inc/FrontMortgage';

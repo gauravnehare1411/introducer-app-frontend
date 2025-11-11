@@ -29,7 +29,7 @@ function App() {
   }, []);
 
   return (
-    <Router basename='app'>
+    <Router basename='portal'>
       <AppNavbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} userRoles={userRoles} setUserRoles={setUserRoles}/>
       <Container style={{ paddingTop: "80px" }}>
         <Routes>

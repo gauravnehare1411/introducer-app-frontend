@@ -50,35 +50,45 @@ export default function Customers() {
 
   return (
     <>
-    <Container className="py-5">
-      <h2 className="mb-4">Customers</h2>
-      <Badge className="m-2 p-2" bg="primary" pill title="Total users">Total Customers - {totalCustomers}</Badge>
+      <Container className="py-5">
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div>
+            <h2 className="mb-2">Customers</h2>
+            <Badge className="m-2 p-2" bg="primary" pill title="Total users">
+              Total Customers - {totalCustomers}
+            </Badge>
+          </div>
 
-      {registrations.length === 0 ? (
-        <Alert variant="info">No registrations found.</Alert>
-      ) : (
-        <Table striped bordered hover responsive>
-          <thead>
-            <tr>
-              <th>Full Name</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>referralId</th>
-            </tr>
-          </thead>
-          <tbody>
-            {registrations.map((reg) => (
-              <tr key={reg._id} onClick={() => handleRowClick(reg.userId)}>
-                <td>{reg.name}</td>
-                <td>{reg.email}</td>
-                <td>{reg.contactnumber}</td>
-                <td className="text-capitalize">{reg.referralId}</td>
+          <Button variant="outline-primary" onClick={() => navigate('/admin/all-customer-applications')}>
+            All Applications
+          </Button>
+        </div>
+
+        {registrations.length === 0 ? (
+          <Alert variant="info">No registrations found.</Alert>
+        ) : (
+          <Table striped bordered hover responsive>
+            <thead>
+              <tr>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>referralId</th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
-      )}
-    </Container>
+            </thead>
+            <tbody>
+              {registrations.map((reg) => (
+                <tr key={reg._id} onClick={() => handleRowClick(reg.userId)}>
+                  <td>{reg.name}</td>
+                  <td>{reg.email}</td>
+                  <td>{reg.contactnumber}</td>
+                  <td className="text-capitalize">{reg.referralId}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
+      </Container>
     </>
   );
 }

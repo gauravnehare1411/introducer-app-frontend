@@ -13,7 +13,11 @@ export default function Introducers({
       <Container className="mt-4">
       <h2 className="mb-4">Introducers</h2>
       <Badge className="m-2 p-2" bg="primary" pill title="Total users">Total Introducers - {totalUsers}</Badge>
-      
+      <Button
+          variant='outline-primary'
+        >
+          View All Referrals
+        </Button>
       {loadingList ? (
         <div className="d-flex justify-content-center py-5">
           <Spinner animation="border" role="status" />

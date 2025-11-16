@@ -12,12 +12,14 @@ const HomePage = ({ isLoggedIn, userRoles }) => {
   }
 
   const handleNavigate = () => {
-    if (hasRole('customer')){
+    if (hasRole('customer')) {
       navigate('/mortgage');
-    } else if (hasRole('user') ) {
-      navigate('/introducer')
+    } else if (hasRole('user')) {
+      navigate('/introducer');
+    } else if (hasRole('admin')) {
+      navigate('/admin')
     }
-  }
+  };
 
 
   return (
@@ -56,7 +58,7 @@ const HomePage = ({ isLoggedIn, userRoles }) => {
         ) : (
           <>
             <Col xs="auto">
-              <Button variant="primary" onClick={ handleNavigate }>Dashboard</Button>
+              <Button variant="primary" onClick={handleNavigate}>Dashboard</Button>
             </Col>
           </>
         )}

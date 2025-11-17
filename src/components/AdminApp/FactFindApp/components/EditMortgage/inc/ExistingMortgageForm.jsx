@@ -78,6 +78,15 @@ export default function ExistingMortgageForm({
             };
         }
 
+        const MAX_SIZE = 4 * 1024 * 1024; // 4 MB
+
+        for (const [key, file] of Object.entries(files)) {
+            if (file instanceof File && file.size > MAX_SIZE) {
+                toast.error(`"${key}" must be less than 4 MB.`);
+                return;
+            }
+        }
+
         const formData = new FormData();
         formData.append('form_data', JSON.stringify(payload));
 

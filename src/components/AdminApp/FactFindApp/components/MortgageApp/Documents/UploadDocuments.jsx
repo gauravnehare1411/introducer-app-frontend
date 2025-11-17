@@ -33,6 +33,15 @@ export default function UploadDocuments() {
         return;
     }
 
+    const MAX_SIZE = 4 * 1024 * 1024;
+
+    for (const [key, file] of Object.entries(files)) {
+        if (file && file.size > MAX_SIZE) {
+            toast.error(`"${key}" must be less than 4 MB.`);
+            return;
+        }
+    }
+
     const formData = new FormData();
     Object.entries(savedData).forEach(([key, value]) => {
         formData.append(key, value);

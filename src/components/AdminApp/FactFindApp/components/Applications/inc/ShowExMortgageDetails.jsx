@@ -1,39 +1,66 @@
+import { toast } from "react-toastify";
+import api from "../../../../../../api";
 
-export default function ShowExMortgageDetails({selectedMortgage, handleEditApplication, setSelectedMortgage}) {
-    const mortgage = selectedMortgage.form_data;
+export default function ShowExMortgageDetails({ selectedMortgage, handleEditApplication, setSelectedMortgage }) {
+  const mortgage = selectedMortgage.form_data;
+  const mort_documents = selectedMortgage?.uploaded_files;
+
+  const handleDownloadFile = async (customerId, fileKey) => {
+    try {
+      const res = await api.get(`/get_file`, {
+        params: {
+          customerId,
+          file_key: fileKey
+        }
+      });
+      const downloadUrl = res.data.download_url;
+      window.open(downloadUrl, "_blank");
+    } catch (error) {
+      console.error("Error downloading file:", error);
+      toast.error("Unable to download file");
+    }
+  };
+
   return (
     <div className="mortgage-detail-popup">
-        <div className="popup-header">
-            <h2>Existing Mortgage Details</h2>
-            <button 
-              className="close-x-button"
-              onClick={() => setSelectedMortgage(null)}
-            >
-              X
+      <div className="popup-header">
+        <h2>Existing Mortgage Details</h2>
+        <button
+          className="close-x-button"
+          onClick={() => setSelectedMortgage(null)}
+        >
+          X
+        </button>
+      </div>
+      <table>
+        <tr><th>Application ID</th><td>{selectedMortgage._id}</td></tr>
+        <tr><th>Customer ID</th><td>{selectedMortgage.customerId}</td></tr>
+        <tr><th>Name</th><td>{mortgage.customerName}</td></tr>
+        <tr><th>Email</th><td>{mortgage.customerEmail}</td></tr>
+        <tr><th>Phone</th><td>{mortgage.customerPhone}</td></tr>
+        <tr><th>Created Date</th><td>{new Date(selectedMortgage.created_at).toLocaleDateString()}</td></tr>
+        <tr><th>Has Mortgage</th><td>{mortgage.hasMortgage ? 'Yes' : 'No'}</td></tr>
+        <tr><th>Payment Method</th><td>{mortgage.paymentMethod}</td></tr>
+        <tr><th>Estimated Property Value</th><td>{mortgage.estPropertyValue}</td></tr>
+        <tr><th>Mortgage Amount</th><td>{mortgage.mortgageAmount}</td></tr>
+        <tr><th>Loan to value</th><td>{mortgage.loanToValue1} %</td></tr>
+        <tr><th>Further Advance</th><td>{mortgage.furtherAdvance}</td></tr>
+        <tr><th>Mortgage Type</th><td>{mortgage.mortgageType}</td></tr>
+        <tr><th>Product Rate Type</th><td>{mortgage.productRateType}</td></tr>
+        <tr><th>ID Proof</th><td><a href="#" onClick={(e) => {e.preventDefault(); handleDownloadFile(selectedMortgage.customerId, mort_documents.id_proof.s3_key)}}>{mort_documents?.id_proof?.file_name}</a></td></tr>
+        <tr><th>Address Proof</th><td><a href="#" onClick={(e) => {e.preventDefault(); handleDownloadFile(selectedMortgage.customerId, mort_documents.address_proof.s3_key)}}>{mort_documents?.address_proof?.file_name}</a></td></tr>
+        <tr><th>Bank Statement</th><td><a href="#" onClick={(e) => {e.preventDefault(); handleDownloadFile(selectedMortgage.customerId, mort_documents.bank_statement.s3_key)}}>{mort_documents?.bank_statement?.file_name}</a></td></tr>
+        <tr><th>Payslip</th><td><a href="#" onClick={(e) => {e.preventDefault(); handleDownloadFile(selectedMortgage.customerId, mort_documents.payslip.s3_key)}}>{mort_documents?.payslip?.file_name}</a></td></tr>
+        <tr><th>Reference</th><td>{mortgage.reference1 || "-"}</td></tr>
+        <tr><th>Status</th><td>{selectedMortgage.status}</td></tr>
+        <tr>
+          <td colSpan="2">
+            <button className="mortgage-edit-button" onClick={() => handleEditApplication(selectedMortgage)}>
+              Edit
             </button>
-        </div>
-        <table>
-            <tr><th>Application ID</th><td>{selectedMortgage._id}</td></tr>
-            <tr><th>Customer ID</th><td>{selectedMortgage.customerId}</td></tr>
-            <tr><th>Status</th><td>{selectedMortgage.status}</td></tr>
-            <tr><th>Created Date</th><td>{new Date(selectedMortgage.created_at).toLocaleDateString()}</td></tr>
-            <tr><th>Has Mortgage</th><td>{mortgage.hasMortgage ? 'Yes' : 'No'}</td></tr>
-            <tr><th>Payment Method</th><td>{mortgage.paymentMethod}</td></tr>
-            <tr><th>Estimated Property Value</th><td>{mortgage.estPropertyValue}</td></tr>
-            <tr><th>Mortgage Amount</th><td>{mortgage.mortgageAmount}</td></tr>
-            <tr><th>Loan to value</th><td>{mortgage.loanToValue1} %</td></tr>
-            <tr><th>Further Advance</th><td>{mortgage.furtherAdvance}</td></tr>
-            <tr><th>Mortgage Type</th><td>{mortgage.mortgageType}</td></tr>
-            <tr><th>Product Rate Type</th><td>{mortgage.productRateType}</td></tr>
-            <tr><th>Reference</th><td>{mortgage.reference1 || "-"}</td></tr>
-            <tr>
-                <td colSpan="2">
-                    <button className="mortgage-edit-button" onClick={() => handleEditApplication(selectedMortgage)}>
-                        Edit
-                    </button>
-                </td>
-            </tr>
-        </table>
+          </td>
+        </tr>
+      </table>
     </div>
   );
 }

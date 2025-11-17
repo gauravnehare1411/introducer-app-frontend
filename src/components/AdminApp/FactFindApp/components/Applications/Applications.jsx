@@ -55,7 +55,7 @@ export default function Applications() {
   const handleDelete = async (applicationId) => {
     try {
       setLoading(true);
-      await api.delete(`/admin/mortgage-application/${applicationId}`);
+      await api.delete(`/delete-mortgage-application/${applicationId}`);
       setUserDetails(prev => prev.filter(app => app._id !== applicationId));
       setSelectedMortgage(null);
       setSelectedNewMortgage(null);

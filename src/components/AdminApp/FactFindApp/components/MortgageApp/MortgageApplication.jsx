@@ -55,6 +55,7 @@ const MortgageApplicationForm = () => {
 
   
   const handleNext = async () => {
+    const customerId = crypto.randomUUID();
 
     if (hasMortgage === null) {
       toast.error('Please select whether you have a mortgage.');
@@ -90,6 +91,7 @@ const MortgageApplicationForm = () => {
     
     const data = hasMortgage
       ? {
+          customerId,
           customerName,
           customerEmail,
           customerPhone,
@@ -105,6 +107,7 @@ const MortgageApplicationForm = () => {
           reference1,
         }
       : {
+          customerId,
           customerName,
           customerEmail,
           customerPhone,

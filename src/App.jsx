@@ -97,7 +97,7 @@ function App() {
           <Route
             path='/mortgage/*'
             element={
-              <ProtectedRoute allowedRoles={['customer']}>
+              <ProtectedRoute allowedRoles={['customer', 'admin']}>
                 <FactFindApp />
               </ProtectedRoute>
             }

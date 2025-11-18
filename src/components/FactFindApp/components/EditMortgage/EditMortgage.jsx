@@ -8,7 +8,7 @@ export default function EditMortgage() {
     const location = useLocation();
     const navigate = useNavigate();
     const { applicationId, applicationData, applicationType } = location.state || {};
-    
+
     // State for existing mortgage
     const [paymentMethod, setPaymentMethod] = useState('');
     const [estPropertyValue, setEstPropertyValue] = useState('');
@@ -19,9 +19,9 @@ export default function EditMortgage() {
     const [productRateType, setProductRateType] = useState('');
     const [renewalDate, setRenewalDate] = useState('');
     const [reference1, setReference1] = useState('');
-    
+
     // State for new mortgage
-    const [isLookingForMortgage, setIsLookingForMortgage] = useState('');
+    const [isLookingForMortgage, setIsLookingForMortgage] = useState(false);
     const [newMortgageType, setNewMortgageType] = useState('');
     const [foundProperty, setFoundProperty] = useState('');
     const [depositAmount, setDepositAmount] = useState('');
@@ -35,6 +35,7 @@ export default function EditMortgage() {
 
     useEffect(() => {
         if (applicationData) {
+            console.log(applicationData.newMortgageType);
             if (applicationType === 'existing') {
                 // Populate existing mortgage fields
                 setPaymentMethod(applicationData.paymentMethod || '');
@@ -48,7 +49,7 @@ export default function EditMortgage() {
                 setReference1(applicationData.reference1 || '');
             } else {
                 // Populate new mortgage fields
-                setIsLookingForMortgage(applicationData.isLookingForMortgage || '');
+                setIsLookingForMortgage(applicationData.isLookingForMortgage);
                 setNewMortgageType(applicationData.newMortgageType || '');
                 setFoundProperty(applicationData.foundProperty || '');
                 setDepositAmount(applicationData.depositAmount || '');
@@ -84,7 +85,7 @@ export default function EditMortgage() {
 
     const handleSave = async () => {
         let payload = {};
-        
+
         if (applicationType === 'existing') {
             payload = {
                 paymentMethod,
@@ -116,7 +117,12 @@ export default function EditMortgage() {
         try {
             await api.put(`/user/mortgage-application/${applicationId}`, payload);
             toast.success('Application updated successfully!');
-            navigate('/mortgage/applications');
+            const roles = JSON.parse(localStorage.getItem("roles") || "[]");
+            if (roles.includes('admin')) {
+                navigate('/admin/all-customer-applications');
+            } else {
+                navigate('/mortgage/applications');
+            }
         } catch (error) {
             console.error('Error updating mortgage:', error);
             toast.error('Failed to update application. Please try again.');
@@ -133,10 +139,10 @@ export default function EditMortgage() {
 
     return (
         <div className="user-details-container">
-            <h2 className="mortgage-details-title" style={{"marginTop": "50px"}}>
+            <h2 className="mortgage-details-title" style={{ "marginTop": "50px" }}>
                 Edit {applicationType === 'existing' ? 'Existing' : 'New'} Mortgage Application
             </h2>
-            
+
             {applicationType === 'existing' ? (
                 <table className="user-details-table">
                     <tbody>
@@ -147,15 +153,15 @@ export default function EditMortgage() {
                         <tr className="st-item">
                             <th><label>Has mortgage?</label></th>
                             <td>Yes</td>
-                        </tr>         
-                        <tr className="st-item"> 
+                        </tr>
+                        <tr className="st-item">
                             <th><label>Payment Method</label></th>
                             <td>
                                 <select className="inp-data" value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
                                     <option value="">Select</option>
                                     <option value="repayment">Repayment</option>
-                                    <option value="interestOnly">Interest Only</option>
-                                    <option value="partAndPart">Part and Part</option>
+                                    <option value="interest only">Interest Only</option>
+                                    <option value="part and part">Part and Part</option>
                                 </select>
                             </td>
                         </tr>
@@ -182,15 +188,14 @@ export default function EditMortgage() {
                                 </select>
                             </td>
                         </tr>
-                        <tr className="st-item"> 
+                        <tr className="st-item">
                             <th><label>Mortgage Type</label></th>
                             <td>
-                                <select className="inp-data" value={mortgageType} onChange={(e) => setMortgageType(e.target.value)} required>          
+                                <select className="inp-data" value={mortgageType} onChange={(e) => setMortgageType(e.target.value)} required>
                                     <option value="">Select</option>
-                                    <option value="fixed">Fixed Rate</option>
-                                    <option value="variable">Variable Rate</option>
-                                    <option value="tracker">Tracker</option>
-                                    <option value="discounted">Discounted</option>
+                                    <option value="residential">Residential</option>
+                                    <option value="consumer buy to let">Consumer Buy to Let</option>
+                                    <option value="company buy to let">Company Buy to Let</option>
                                 </select>
                             </td>
                         </tr>
@@ -209,12 +214,12 @@ export default function EditMortgage() {
                             <tr className="st-item">
                                 <th><label>Renewal Date</label></th>
                                 <td>
-                                    <input 
-                                        className="inp-data" 
-                                        type="date" 
-                                        value={renewalDate} 
-                                        onChange={(e) => setRenewalDate(e.target.value)} 
-                                        required 
+                                    <input
+                                        className="inp-data"
+                                        type="date"
+                                        value={renewalDate}
+                                        onChange={(e) => setRenewalDate(e.target.value)}
+                                        required
                                     />
                                 </td>
                             </tr>
@@ -224,25 +229,31 @@ export default function EditMortgage() {
                             <td><input type="text" className='inp-data' placeholder='If Any' value={reference1} onChange={(e) => setReference1(e.target.value)} /></td>
                         </tr>
                         <tr className="st-item">
-                            <td><button style={{"background": "red", "border": 'none', "color": 'white', "padding": '5px'}} onClick={handleCancel}>Cancel</button></td>
-                            <td><button style={{"background": "green", "border": 'none', "color": 'white', "padding": '5px'}} onClick={handleSave}>Save</button></td>
+                            <td><button style={{ "background": "red", "border": 'none', "color": 'white', "padding": '5px' }} onClick={handleCancel}>Cancel</button></td>
+                            <td><button style={{ "background": "green", "border": 'none', "color": 'white', "padding": '5px' }} onClick={handleSave}>Save</button></td>
                         </tr>
                     </tbody>
                 </table>
             ) : (
                 <table className="user-details-table">
                     <tbody>
-                        <tr>
+                        <tr className="st-item">
                             <th>Application ID</th>
                             <td>{applicationId}</td>
                         </tr>
                         <tr className="st-item">
                             <th><label>Are you looking for a mortgage?</label></th>
                             <td>
-                                <select className="inp-data" value={isLookingForMortgage} onChange={(e) => setIsLookingForMortgage(e.target.value)}>
-                                    <option value="yes">Yes</option>
-                                    <option value="no">No</option>
-                                </select>
+                                <td>
+                                    <label>
+                                        <input type="radio" name="look-for-mortgage" alue="yes" checked={isLookingForMortgage === true} required onChange={() => setIsLookingForMortgage(true)} />
+                                        Yes
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="look-for-mortgage" value="no" checked={isLookingForMortgage === false} onChange={() => setIsLookingForMortgage(false)} />
+                                        No
+                                    </label>
+                                </td>
                             </td>
                         </tr>
                         <tr className="st-item">
@@ -250,10 +261,9 @@ export default function EditMortgage() {
                             <td>
                                 <select className="inp-data" value={newMortgageType} onChange={(e) => setNewMortgageType(e.target.value)}>
                                     <option value="">Select</option>
-                                    <option value="firstTimeBuyer">First Time Buyer</option>
-                                    <option value="homeMover">Home Mover</option>
-                                    <option value="remortgage">Remortgage</option>
-                                    <option value="buyToLet">Buy to Let</option>
+                                    <option value="residential">Residential</option>
+                                    <option value="consumer buy to let">Consumer Buy to Let</option>
+                                    <option value="company buy to let">Company Buy to Let</option>
                                 </select>
                             </td>
                         </tr>
@@ -294,9 +304,7 @@ export default function EditMortgage() {
                                 <select className="inp-data" value={sourceOfDeposit} onChange={(e) => setSourceOfDeposit(e.target.value)}>
                                     <option value="">Select</option>
                                     <option value="savings">Savings</option>
-                                    <option value="gift">Gift</option>
-                                    <option value="inheritance">Inheritance</option>
-                                    <option value="saleOfProperty">Sale of Property</option>
+                                    <option value="other">Other</option>
                                 </select>
                             </td>
                         </tr>
@@ -312,8 +320,8 @@ export default function EditMortgage() {
                                 <select className="inp-data" value={newPaymentMethod} onChange={(e) => setNewPaymentMethod(e.target.value)}>
                                     <option value="">Select</option>
                                     <option value="repayment">Repayment</option>
-                                    <option value="interestOnly">Interest Only</option>
-                                    <option value="partAndPart">Part and Part</option>
+                                    <option value="interest only">Interest Only</option>
+                                    <option value="part and part">Part and Part / Split</option>
                                 </select>
                             </td>
                         </tr>
@@ -322,8 +330,8 @@ export default function EditMortgage() {
                             <td><input type="text" className='inp-data' placeholder='If Any' value={reference2} onChange={(e) => setReference2(e.target.value)} /></td>
                         </tr>
                         <tr className="st-item">
-                            <td><button style={{"background": "red", "border": 'none', "color": 'white', "padding": '5px'}} onClick={handleCancel}>Cancel</button></td>
-                            <td><button style={{"background": "green", "border": 'none', "color": 'white', "padding": '5px'}} onClick={handleSave}>Save</button></td>
+                            <td><button style={{ "background": "red", "border": 'none', "color": 'white', "padding": '5px' }} onClick={handleCancel}>Cancel</button></td>
+                            <td><button style={{ "background": "green", "border": 'none', "color": 'white', "padding": '5px' }} onClick={handleSave}>Save</button></td>
                         </tr>
                     </tbody>
                 </table>

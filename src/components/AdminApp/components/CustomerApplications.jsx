@@ -12,6 +12,26 @@ export default function CustomerApplications() {
   const [selectedMortgage, setSelectedMortgage] = useState(null);
   const [showFilter, setShowFilter] = useState("all");
   const navigate = useNavigate();
+  
+  const handleEditApplication = (application) => {
+    if (application.hasMortgage) {
+      navigate('/mortgage/edit-existing-mortgage', { 
+        state: { 
+          applicationId: application._id,
+          applicationData: application,
+          applicationType: 'existing'
+        } 
+      });
+    } else {
+      navigate('/mortgage/edit-existing-mortgage', { 
+        state: { 
+          applicationId: application._id,
+          applicationData: application,
+          applicationType: 'new'
+        } 
+      });
+    }
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -51,6 +71,7 @@ export default function CustomerApplications() {
       </Container>
     );
   }
+  
 
   return (
     <>
@@ -126,6 +147,7 @@ export default function CustomerApplications() {
           <ShowExistingMortgageDetails
             selectedMortgage={selectedMortgage}
             setSelectedMortgage={setSelectedMortgage}
+            handleEditApplication={handleEditApplication}
           />
         )}
 
@@ -133,6 +155,7 @@ export default function CustomerApplications() {
           <ShowNewMortgageDetails
             selectedMortgage={selectedMortgage}
             setSelectedMortgage={setSelectedMortgage}
+            handleEditApplication={handleEditApplication}
           />
         )}
       </Container>

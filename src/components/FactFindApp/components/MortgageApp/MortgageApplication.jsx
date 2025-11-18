@@ -288,7 +288,7 @@ const MortgageApplicationForm = () => {
                         <td><label>Are you looking for a new mortgage?</label></td>
                         <td>
                           <label>
-                            <input type="radio" name="look-for-mortgage" alue="yes" required onChange={() => setLookForMortgage(true)} />
+                            <input type="radio" name="look-for-mortgage" value="yes" required onChange={() => setLookForMortgage(true)} />
                             Yes
                           </label>
                           <label>

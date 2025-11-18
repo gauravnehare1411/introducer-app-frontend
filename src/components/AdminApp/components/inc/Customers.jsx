@@ -78,7 +78,7 @@ export default function Customers() {
             </thead>
             <tbody>
               {registrations.map((reg) => (
-                <tr key={reg._id} onClick={() => handleRowClick(reg.userId)}>
+                <tr key={reg.user_id} onClick={() => handleRowClick(reg.userId)}>
                   <td>{reg.name}</td>
                   <td>{reg.email}</td>
                   <td>{reg.contactnumber}</td>

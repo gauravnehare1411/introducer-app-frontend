@@ -7,7 +7,8 @@ import Applications from './components/Applications';
 import Customers from './components/inc/Customers';
 import FactFindApp from './FactFindApp/FactFindApp';
 import CustomerApplications from './components/CustomerApplications';
-
+import MortgageDataApp from '../MortgageApp/MortgageApp';
+import MortgageViewApp from '../MortgageViewApp/MortgageViewApp';
 
 const AdminApp = () => {
   return (
@@ -19,6 +20,8 @@ const AdminApp = () => {
         <Route path="/customers" element={<Customers />} />
         <Route path='/all-customer-applications' element={<CustomerApplications />} />
         <Route path="/my-applications/*" element={<FactFindApp />} />
+        <Route path="/factfind/*" element={<MortgageDataApp />} />
+        <Route path="/view/factfind/*" element={<MortgageViewApp />} />
       </Routes>
     </div>
   );

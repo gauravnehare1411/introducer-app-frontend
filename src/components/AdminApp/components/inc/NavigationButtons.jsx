@@ -28,6 +28,13 @@ export default function NavigationButtons({ onSelect, selectedView }) {
         >
           My Applications
         </Button>
+
+        <Button
+          variant="outline-primary"
+          onClick={() => navigate('/factfind')}
+        >
+          FactFind
+        </Button>
       </ButtonGroup>
     </div>
   );

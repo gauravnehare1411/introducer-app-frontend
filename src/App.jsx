@@ -15,7 +15,6 @@ import IntroducerApp from './components/IntroducerApp/IntroducerApp';
 import IntroducerRegister from './components/IntroducerRegister';
 import HomePage from './components/HomePage';
 
-
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('access_token'));
   const [userRoles, setUserRoles] = useState(JSON.parse(localStorage.getItem('roles') || '[]'));

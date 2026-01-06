@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000/',
+  baseURL: 'https://administered-maintenance-car-vienna.trycloudflare.com/',
 });
 
 let isRefreshing = false;
@@ -71,7 +71,7 @@ api.interceptors.response.use(
       
       try {
         const response = await axios.post(
-          'http://127.0.0.1:8000/token/refresh',
+          'https://administered-maintenance-car-vienna.trycloudflare.com/token/refresh',
           { refresh_token: refreshToken }
         );
         

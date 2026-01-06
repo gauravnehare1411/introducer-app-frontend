@@ -130,7 +130,12 @@ export default function EditMortgage() {
     };
 
     const handleCancel = () => {
-        navigate('/mortgage/applications');
+        const roles = JSON.parse(localStorage.getItem("roles") || "[]");
+        if (roles.includes('admin')) {
+            navigate('/admin/all-customer-applications');
+        } else {
+            navigate('/mortgage/applications');
+        }
     };
 
     if (!applicationData) {

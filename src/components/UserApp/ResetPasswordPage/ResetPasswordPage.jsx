@@ -30,7 +30,7 @@ const ResetPasswordPage = () => {
       });
 
       toast.success('Password has been reset successfully.');
-      navigate('/login');
+      navigate('/sign-in');
     } catch (err) {
       toast.error(err.response?.data?.detail || 'Password reset failed.');
     } finally {

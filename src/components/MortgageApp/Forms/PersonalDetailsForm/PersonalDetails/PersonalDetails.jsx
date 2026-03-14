@@ -14,30 +14,31 @@ const PersonalDetails = () => {
 
   // Main client state
   const [mainClientDetails, setMainClientDetails] = useState({
-    title: '',
-    forename: '',
-    middleName: '',
-    surname: '',
+    title: formData?.mainDetails?.mainDetails?.title || '',
+    forename: formData?.mainDetails?.mainDetails?.forename || '',
+    middleName: formData?.mainDetails?.mainDetails?.middleName || '',
+    surname: formData?.mainDetails?.mainDetails?.surname || '',
     previousName: '',
     dateOfNameChange: '',
     mothersMaidenName: '',
-    dateOfBirth: '',
-    age: '',
-    genderAtBirth: '',
-    identifiesAs: '',
+    dateOfBirth: formData?.mainDetails?.mainDetails?.dateOfBirth || '',
+    age: formData?.mainDetails?.mainDetails?.age || '',
+    genderAtBirth: formData?.mainDetails?.mainDetails?.genderAtBirth || '',
+    identifiesAs: formData?.mainDetails?.mainDetails?.identifiesAs || '',
     niNumber: '',
     relationshipStatus: '',
-    nationality: '',
+    nationality: formData?.mainDetails?.mainDetails?.nationality || '',
     isExPatriate: '',
     isPublicOfficial: '',
     countryOfResidence: '',
     tempOutsideUK: '',
     retirementAge: '',
-    mobileNumber: '',
+    mobileNumber: formData?.mainDetails?.mainDetails?.mobilePhone || '',
     daytimeNumber: '',
     hasDependents: '',
     dependents: [],
   });
+  
 
   // Partner state
   const [partnerDetails, setPartnerDetails] = useState({
@@ -191,7 +192,7 @@ const PersonalDetails = () => {
       mainClientDetails,
       partnerDetails: hasPartner ? partnerDetails : null,
     });
-    navigate('/mortgage/add-data/residential');
+    navigate('/admin/factfind/residential');
   };
 
   return (
@@ -199,7 +200,7 @@ const PersonalDetails = () => {
       
       <FormButtons
         onBack={() => navigate(-1)}
-        onNext={() => navigate('/mortgage/add-data/residential')}
+        onNext={() => navigate('/admin/factfind/residential')}
       />
 
       {/* Main Client Fields */}
@@ -258,7 +259,7 @@ const PersonalDetails = () => {
 
       <FormButtons
         onBack={() => navigate(-1)}
-        onNext={() => navigate('/mortgage/add-data/residential')}
+        onNext={() => navigate('/admmin/factfind/residential')}
       />
     </form>
   );

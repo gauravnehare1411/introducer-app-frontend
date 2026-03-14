@@ -4,6 +4,7 @@ import PersonForm from './PersonForm/PersonForm';
 import ContactForm from './ContactForm/ContactForm';
 import useFormStore from '../../store';
 import { validateMainDetails } from './Validations';
+import { toast } from 'react-toastify';
 
 const MainDetails = () => {
   // State for Main Details
@@ -222,7 +223,7 @@ const MainDetails = () => {
 
     try {
       await updateFormData('mainDetails', data);
-      setSuccess("Data Submitted!");
+      toast.success("Data Submitted!");
       console.log('Form Data Submitted:', data);
       setTimeout(() => {
         if (successRef.current) {

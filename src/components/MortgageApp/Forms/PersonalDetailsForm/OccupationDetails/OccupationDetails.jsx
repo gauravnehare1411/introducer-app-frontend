@@ -179,7 +179,7 @@ const Occupation = () => {
       return;
     }
     updateFormData("occupationData", cleanedOccupationData);
-    navigate('/mortgage/add-data/employer-benefit');
+    navigate('/admin/factfind/employer-benefit');
   };
 
   // Generic function to add previous employment
@@ -219,7 +219,7 @@ const Occupation = () => {
     <form onSubmit={handleSubmit} className="form-container">
       <FormButtons
         onBack={() => navigate(-1)}
-        onNext={() => navigate('/mortgage/add-data/employer-benefit')}
+        onNext={() => navigate('/admin/factfind/employer-benefit')}
       />
 
       {/* Main Client Occupation */}
@@ -299,7 +299,7 @@ const Occupation = () => {
       {(shouldShowButtons(occupationData.client) || (hasPartner && shouldShowButtons(occupationData.partner))) && (
         <FormButtons
           onBack={() => navigate(-1)}
-          onNext={() => navigate('/mortgage/add-data/employer-benefit')}
+          onNext={() => navigate('/admin/factfind/employer-benefit')}
         />
       )}
     </form>

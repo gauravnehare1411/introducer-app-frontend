@@ -12,31 +12,29 @@ const Residential = () => {
   const navigate = useNavigate();
   const { formData, fetchFormData, updateFormData } = useFormStore();
 
-  // Initialize residential data structure with proper fallbacks
+  // Initialize residential data structure
   const [residentialData, setResidentialData] = useState(() => ({
     client: formData?.residentialData?.client || [
       { address: ['', '', '', '', ''], status: '', dateMovedIn: '', postcode: '' }
     ],
-    partner: formData?.residentialData?.partner || [
-      { address: ['', '', '', '', ''], status: '', dateMovedIn: '', postcode: '' }
-    ]
+    partner: formData?.residentialData?.partner || []
   }));
 
-  // Check if partner has any residential data
-  const hasPartnerResidentialData = residentialData.partner?.some(residence => {
-    return (
-      residence.address.some(addr => addr.trim() !== '') ||
-      residence.status.trim() !== '' ||
-      residence.dateMovedIn.trim() !== '' ||
-      residence.postcode.trim() !== ''
-    );
-  });
-
-  // Check if partner exists in main details
   const hasPartnerInMainDetails = formData?.mainDetails?.partners?.length > 0;
 
-  // Final hasPartner value considering both main details and residential data
-  const hasPartner = hasPartnerInMainDetails && hasPartnerResidentialData;
+  const hasPartnerResidentialData = residentialData.partner?.length > 0;
+
+  const shouldShowPartner = hasPartnerInMainDetails;
+
+  const addPartnerResidence = () => {
+    setResidentialData(prev => ({
+      ...prev,
+      partner: [
+        ...(prev.partner || []),
+        { address: ['', '', '', '', ''], status: '', dateMovedIn: '', postcode: '' }
+      ]
+    }));
+  };
 
   const isLessThanThreeYearsAgo = (date) => {
     if (!date) return false;
@@ -74,23 +72,18 @@ const Residential = () => {
   }, [fetchFormData]);
   
   useEffect(() => {
-    if (formData?.residentialData) {
-      // Check if partner data exists and has any values
-      const partnerData = formData.residentialData.partner || [];
-      const hasStoredPartnerData = partnerData.some(residence => {
-        return (
-          residence.address.some(addr => addr.trim() !== '') ||
-          residence.status.trim() !== '' ||
-          residence.dateMovedIn.trim() !== '' ||
-          residence.postcode.trim() !== ''
-        );
-      });
-
+    if (formData?.residentialData || formData?.mainDetails) {
+      // Always initialize partner with at least one entry if partner exists in main details
+      const hasPartner = formData?.mainDetails?.partners?.length > 0;
+      const storedPartnerData = formData?.residentialData?.partner || [];
+      
       setResidentialData({
-        client: formData.residentialData.client || [
+        client: formData?.residentialData?.client || [
           { address: ['', '', '', '', ''], status: '', dateMovedIn: '', postcode: '' }
         ],
-        partner: hasStoredPartnerData ? partnerData : []
+        partner: hasPartner && storedPartnerData.length === 0 
+          ? [{ address: ['', '', '', '', ''], status: '', dateMovedIn: '', postcode: '' }]
+          : storedPartnerData
       });
     }
   }, [formData]);
@@ -128,10 +121,15 @@ const Residential = () => {
     // Clean up partner data if no residential details are provided
     const cleanedResidentialData = {
       client: residentialData.client,
-      partner: hasPartnerResidentialData ? residentialData.partner : []
+      partner: residentialData.partner.filter(residence => 
+        residence.address.some(addr => addr.trim() !== '') ||
+        residence.status.trim() !== '' ||
+        residence.dateMovedIn.trim() !== '' ||
+        residence.postcode.trim() !== ''
+      )
     };
 
-    const validationErrors = validateResidentialDetails(cleanedResidentialData, hasPartner);
+    const validationErrors = validateResidentialDetails(cleanedResidentialData, shouldShowPartner);
     setErrors(validationErrors);
     
     if (Object.keys(validationErrors).length > 0) {
@@ -145,14 +143,14 @@ const Residential = () => {
     }
 
     updateFormData("residentialData", cleanedResidentialData);
-    navigate('/mortgage/add-data/occupation');
+    navigate('/admin/factfind/occupation');
   };
 
   return (
     <form onSubmit={handleSubmit} className="form-container">
       <FormButtons
         onBack={() => navigate(-1)}
-        onNext={() => navigate('/mortgage/add-data/occupation')}
+        onNext={() => navigate('/admin/factfind/occupation')}
       />
 
       {/* Main Client Section */}
@@ -175,24 +173,36 @@ const Residential = () => {
       ))}
 
       {/* Partner Section (conditionally rendered) */}
-      {hasPartnerInMainDetails && (
+      {shouldShowPartner && (
         <>
           <h3>Client 2 Residential Details</h3>
-          {(residentialData.partner || []).map((residence, index) => (
-            <ResidenceForm
-              key={`partner-${index}`}
-              residence={residence}
-              index={index}
-              handleChange={(index, field, value) => handleChange('partner', index, field, value)}
-              findAddress={() => findAddress('partner', index)}
-            />
-          ))}
+          {(residentialData.partner || []).length === 0 ? (
+            <div className="form-group">
+              <button 
+                type="button" 
+                onClick={addPartnerResidence}
+                className="btn btn-secondary"
+              >
+                Add Residential Details for Client 2
+              </button>
+            </div>
+          ) : (
+            (residentialData.partner || []).map((residence, index) => (
+              <ResidenceForm
+                key={`partner-${index}`}
+                residence={residence}
+                index={index}
+                handleChange={(index, field, value) => handleChange('partner', index, field, value)}
+                findAddress={() => findAddress('partner', index)}
+              />
+            ))
+          )}
         </>
       )}
 
       <FormButtons
         onBack={() => navigate(-1)}
-        onNext={() => navigate('/mortgage/add-data/occupation')}
+        onNext={() => navigate('/admin/factfind/occupation')}
       />
     </form>
   );

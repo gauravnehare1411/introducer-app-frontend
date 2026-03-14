@@ -57,7 +57,7 @@ const Navbar = () => {
 
   const personalNav = [
     ...baseNav.slice(0, employerBenefitIndex + 1),
-    ...(formData.occupationData?.status === "Self-Employed"
+    ...(formData.occupationData?.client?.status === "Self-Employed"
       ? [
           { path: "/admin/factfind/self-employed-details", label: "Self Employed Details" },
           { path: "/admin/factfind/self-employed-income-details", label: "Self Employed Income Details" },

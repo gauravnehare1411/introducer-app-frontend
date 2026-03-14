@@ -31,7 +31,7 @@ export default function NavigationButtons({ onSelect, selectedView }) {
 
         <Button
           variant="outline-primary"
-          onClick={() => navigate('/factfind')}
+          onClick={() => navigate('/admin/factfind')}
         >
           FactFind
         </Button>

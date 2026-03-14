@@ -97,9 +97,9 @@ const EmployerBenefit = () => {
   // Handle navigation based on occupation status
   const handleNext = () => {
     if (occupationData.client.status === "Self-Employed") {
-      navigate('/mortgage/add-data/self-employed-details');
+      navigate('/admin/factfind/self-employed-details');
     } else {
-      navigate('/mortgage/add-data/secondary-occupation');
+      navigate('/admin/factfind/secondary-occupation');
     }
   };
 
